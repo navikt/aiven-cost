@@ -19,9 +19,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
 import org.slf4j.event.Level
 
-fun Application.aivenApi(
-    appConfig: ApplicationConfig = this.environment.config
-) {
+fun Application.aivenApi() {
     install(CallLogging) {
         level = Level.INFO
         filter { call ->
@@ -51,8 +49,8 @@ fun Application.aivenApi(
     routing {
         nais()
     }
-    val token = appConfig.property("aiven.token").getString()
-    val invoiceData = Aiven(token).getInvoiceData()
+    val configuration = Configuration()
+    val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
     log.info(invoiceData)
 
 
