@@ -31,6 +31,7 @@ jobs:
           "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
   deployToProd:
     name: "Deploy to prod"
+    needs: "build"
     runs-on: "ubuntu-18.04"
     steps:
       - uses: "actions/checkout@v2"
