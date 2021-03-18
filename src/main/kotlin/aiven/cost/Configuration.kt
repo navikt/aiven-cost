@@ -11,6 +11,6 @@ private fun config() =
     systemProperties() overriding EnvironmentVariables
 
 data class Configuration(
-    val aivenToken: String = config()[Key("secret", stringType)],
+    val aivenToken: String = config()[Key("AIVEN-TOKEN", stringType)],
 
     )
