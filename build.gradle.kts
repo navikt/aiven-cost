@@ -30,6 +30,7 @@ val serializerVersion="0.20.0"
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.natpryce:konfig:1.6.10.0")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.2")
     implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
