@@ -35,7 +35,7 @@ spec:
        - {{url}}
       {{/each}}
   envFrom:
-    - secret: secret
+    - secret: aiven-authentication-token
   accessPolicy:
     outbound:
       external:
