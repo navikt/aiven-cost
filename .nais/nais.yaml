@@ -34,3 +34,9 @@ spec:
     {{#each ingresses as |url|}}
        - {{url}}
       {{/each}}
+  envFrom:
+    - secret: aiven-authentication-token
+  accessPolicy:
+    outbound:
+      external:
+        - host: api.aiven.io

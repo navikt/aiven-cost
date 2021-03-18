@@ -21,8 +21,6 @@ import org.slf4j.event.Level
 
 fun Application.aivenApi(
     appConfig: ApplicationConfig = this.environment.config
-
-
 ) {
     install(CallLogging) {
         level = Level.INFO
@@ -52,7 +50,11 @@ fun Application.aivenApi(
     }
     routing {
         nais()
-
     }
+    val token = appConfig.property("aiven.token").getString()
+    val invoiceData = Aiven(token).getInvoiceData()
+    log.info(invoiceData)
+
+
 }
 
