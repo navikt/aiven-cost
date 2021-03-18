@@ -18,14 +18,14 @@ spec:
     initialDelay: 20
     timeout: 60
   replicas:
-    min: 2
-    max: 2
+    min: 1
+    max: 1
     cpuThresholdPercentage: 50
   prometheus:
     enabled: true
     path: "/internal/prometheus"
   limits:
-    cpu: "200m"
+    cpu: "400m"
     memory: "256Mi"
   requests:
     cpu: "200m"

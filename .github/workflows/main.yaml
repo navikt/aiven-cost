@@ -29,22 +29,8 @@ jobs:
         \ && docker push ${IMAGE}"
         env:
           "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
-  deployToDev:
-    name: "Deploy to dev"
-    needs: "build"
-    runs-on: "ubuntu-18.04"
-    steps:
-      - uses: "actions/checkout@v2"
-      - name: "Deploy to dev-gcp"
-        uses: "nais/deploy/actions/deploy@v1"
-        env:
-          "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
-          "CLUSTER": "dev-gcp"
-          "RESOURCE": ".nais/nais.yaml"
-          "VARS": ".nais/dev.yaml"
   deployToProd:
     name: "Deploy to prod"
-    needs: "deployToDev"
     runs-on: "ubuntu-18.04"
     steps:
       - uses: "actions/checkout@v2"
