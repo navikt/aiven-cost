@@ -8,12 +8,12 @@ metadata:
 spec:
   image: {{image}}
   liveness:
-    path: "/isalive"
+    path: "/internal/isalive"
     port: 8080
     initialDelay: 20
     timeout: 60
   readiness:
-    path: "/isready"
+    path: "/internal/isready"
     port: 8080
     initialDelay: 20
     timeout: 60
@@ -23,7 +23,7 @@ spec:
     cpuThresholdPercentage: 50
   prometheus:
     enabled: true
-    path: "/metrics"
+    path: "/internal/prometheus"
   limits:
     cpu: "200m"
     memory: "256Mi"
