@@ -8,7 +8,7 @@ import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 
 private fun config() =
-    systemProperties() overriding EnvironmentVariables overriding ConfigurationProperties.fromResource("aiven.properties")
+    systemProperties() overriding EnvironmentVariables
 
 data class Configuration(
     val aivenToken: String = config()[Key("secret", stringType)],
