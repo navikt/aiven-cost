@@ -23,7 +23,9 @@ class Aiven(val token: String) {
                 println("$name: $value")
             }
 
-            return response.body!!.string()
+            val response = response.body!!.string()
+            println(response)
+            return response
 
         }
 
