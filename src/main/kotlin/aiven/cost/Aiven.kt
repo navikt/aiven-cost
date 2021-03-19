@@ -25,19 +25,18 @@ class Aiven(val token: String) {
     }
 
     private fun getInvoiceLines(invoices: List<String>, billingGroupdId: String) {
-        val invoiceMap = invoices.forEach { invoice_id ->
-            client.newCall(
-                Request.Builder()
-                    .url("https://api.aiven.io/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
-                    .addHeader("authorization", "aivenv1 $token")
-                    .build()
-            ).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                val body = response.body!!.string()
-                println(body)
-                body
-            }
-        }
+        val invoiceMap = invoices.map { invoice_id ->
+            invoice_id to
+                    client.newCall(
+                        Request.Builder()
+                            .url("https://api.aiven.io/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
+                            .addHeader("authorization", "aivenv1 $token")
+                            .build()
+                    ).execute().use { response ->
+                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                        response.body!!.string()
+                    }
+        }.toMap()
     }
 
     private fun getInvoices(billingGroupdId: String): List<String> {
