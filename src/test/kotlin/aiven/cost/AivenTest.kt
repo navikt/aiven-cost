@@ -28,6 +28,7 @@ class AivenTest {
 
         val secret = "secret"
         val billingGroupId = "123"
+        val invoiceId = "da23c-1"
         val billlingGroupJsonFromAiven = """
                                             {
                    "billing_groups":[
@@ -71,37 +72,35 @@ class AivenTest {
                              "billing_group_name":"Default ",
                              "currency":"USD",
                              "download_cookie":"123",
-                             "invoice_number":"da23c-1",
+                             "invoice_number":"$invoiceId",
                              "period_begin":"2020-07-01T00:00:00Z",
                              "period_end":"2020-07-31T23:59:59Z",
                              "state":"paid",
                              "total_inc_vat":"0.00",
                              "total_vat_zero":"0.00"
-                          },
-                          {
-                             "billing_group_name":"Default ",
-                             "currency":"USD",
-                             "download_cookie":"321",
-                             "invoice_number":"da23c-2",
-                             "period_begin":"2020-08-01T00:00:00Z",
-                             "period_end":"2020-08-31T23:59:59Z",
-                             "state":"paid",
-                             "total_inc_vat":"111.65",
-                             "total_vat_zero":"111.65"
-                          },
-                          {
-                             "billing_group_name":"Default ",
-                             "currency":"USD",
-                             "download_cookie":"432",
-                             "invoice_number":"da23c-3",
-                             "period_begin":"2020-09-01T00:00:00Z",
-                             "period_end":"2020-09-30T23:59:59Z",
-                             "state":"paid",
-                             "total_inc_vat":"222.42",
-                             "total_vat_zero":"222.42"
                           }
                        ]
                     }""".trimMargin()
+        val invoiceLineJsonFromAiven = """
+            {
+               "lines":[
+                  {
+                     "cloud_name":"skyen",
+                     "description":"beskrivelse av skyen",
+                     "line_total_local":"2.00",
+                     "line_total_usd":"2.00",
+                     "line_type":"service_charge",
+                     "local_currency":"USD",
+                     "project_name":"test-project",
+                     "service_name":"test-service",
+                     "service_plan":"test-plan",
+                     "service_type":"test-type",
+                     "timestamp_begin":"2020-08-19T11:21:31Z",
+                     "timestamp_end":"2020-08-19T14:20:05Z"
+                  }
+                ]
+            }
+        """.trimIndent()
 
         stubFor(
             get(urlEqualTo("/v1/billing-group/$billingGroupId/invoice"))
@@ -123,6 +122,18 @@ class AivenTest {
                         .withStatus(200)
                         .withBody(
                             billlingGroupJsonFromAiven.trimIndent()
+                        )
+                )
+        )
+
+        stubFor(
+            get(urlEqualTo("/v1/billing-group/$billingGroupId/invoice/$invoiceId/lines"))
+                .withHeader("authorization", equalTo("aivenv1 $secret"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(
+                            invoiceLineJsonFromAiven.trimIndent()
                         )
                 )
         )
