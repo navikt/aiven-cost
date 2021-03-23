@@ -19,10 +19,10 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
             billingGroupdId.isEmpty() -> emptyList()
             else -> getInvoices(billingGroupdId)
         }
-        return getInvoiceMap(invoices, billingGroupdId)
+        return toInvoiceMap(invoices, billingGroupdId)
     }
 
-    private fun getInvoiceMap(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>?> {
+    private fun toInvoiceMap(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>?> {
         return invoices.map { invoice_id -> invoice_id to getInvoiceLines(billingGroupdId, invoice_id) }.toMap()
     }
 
@@ -30,18 +30,18 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         billingGroupdId: String,
         invoice_id: String
     ): List<InvoiceLine>? {
-        val body = callAiven("$hostAndPort/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
+        val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, String>>>("$.lines[*]")
         return list?.map { InvoiceLine(it) }?.toList()
     }
 
     private fun getInvoices(billingGroupdId: String): List<String> {
-        val body = callAiven("$hostAndPort/v1/billing-group/$billingGroupdId/invoice")
+        val body = callAiven("/v1/billing-group/$billingGroupdId/invoice")
         return JsonPath.parse(body)?.read<List<String>>("$.invoices[*].invoice_number").orEmpty()
     }
 
     private fun getBillingGroup(): String {
-        val body = callAiven("$hostAndPort/v1/billing-group")
+        val body = callAiven("/v1/billing-group")
         return JsonPath.parse(body)?.read<String>("$.billing_groups[0].billing_group_id").orEmpty()
     }
 
@@ -49,7 +49,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     private fun callAiven(aivenApiUrl: String): String {
         return client.newCall(
             Request.Builder()
-                .url(aivenApiUrl)
+                .url("$hostAndPort$aivenApiUrl")
                 .addHeader("authorization", "aivenv1 $token")
                 .build()
         ).execute().use { response ->
