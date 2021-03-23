@@ -11,7 +11,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
-    fun getInvoiceData(): String {
+    fun getInvoiceData(): Map<String, List<InvoiceLine>?> {
 
         val billingGroupdId = getBillingGroup()
 
@@ -19,12 +19,11 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
             billingGroupdId.isEmpty() -> emptyList()
             else -> getInvoices(billingGroupdId)
         }
-        getInvoiceLines(invoices, billingGroupdId)
-        return ""
+        return getInvoiceLines(invoices, billingGroupdId)
     }
 
-    private fun getInvoiceLines(invoices: List<String>, billingGroupdId: String) {
-        val invoiceMap = invoices.map { invoice_id ->
+    private fun getInvoiceLines(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>?> {
+        return invoices.map { invoice_id ->
             invoice_id to
                     client.newCall(
                         Request.Builder()
@@ -33,7 +32,9 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
                             .build()
                     ).execute().use { response ->
                         if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                        response.body!!.string()
+                        val body = response.body!!.string()
+                        val list = JsonPath.parse(body)?.read<List<Map<String,String>>>("$.lines[*]")
+                        list?.map { InvoiceLine(it) }?.toList()
                     }
         }.toMap()
     }

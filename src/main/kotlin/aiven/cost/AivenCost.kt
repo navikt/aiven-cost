@@ -51,7 +51,7 @@ fun Application.aivenApi() {
     }
     val configuration = Configuration()
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
-    log.info(invoiceData)
+
 
 
 }
