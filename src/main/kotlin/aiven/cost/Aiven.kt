@@ -19,50 +19,42 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
             billingGroupdId.isEmpty() -> emptyList()
             else -> getInvoices(billingGroupdId)
         }
-        return getInvoiceLines(invoices, billingGroupdId)
+        return getInvoiceMap(invoices, billingGroupdId)
     }
 
-    private fun getInvoiceLines(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>?> {
-        return invoices.map { invoice_id ->
-            invoice_id to
-                    client.newCall(
-                        Request.Builder()
-                            .url("$hostAndPort/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
-                            .addHeader("authorization", "aivenv1 $token")
-                            .build()
-                    ).execute().use { response ->
-                        if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                        val body = response.body!!.string()
-                        val list = JsonPath.parse(body)?.read<List<Map<String,String>>>("$.lines[*]")
-                        list?.map { InvoiceLine(it) }?.toList()
-                    }
-        }.toMap()
+    private fun getInvoiceMap(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>?> {
+        return invoices.map { invoice_id -> invoice_id to getInvoiceLines(billingGroupdId, invoice_id) }.toMap()
+    }
+
+    private fun getInvoiceLines(
+        billingGroupdId: String,
+        invoice_id: String
+    ): List<InvoiceLine>? {
+        val body = callAiven("$hostAndPort/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
+        val list = JsonPath.parse(body)?.read<List<Map<String, String>>>("$.lines[*]")
+        return list?.map { InvoiceLine(it) }?.toList()
     }
 
     private fun getInvoices(billingGroupdId: String): List<String> {
-        client.newCall(
-            Request.Builder()
-                .url("$hostAndPort/v1/billing-group/$billingGroupdId/invoice")
-                .addHeader("authorization", "aivenv1 $token")
-                .build()
-        ).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            val body = response.body!!.string()
-            return JsonPath.parse(body)?.read<List<String>>("$.invoices[*].invoice_number").orEmpty()
-        }
+        val body = callAiven("$hostAndPort/v1/billing-group/$billingGroupdId/invoice")
+        return JsonPath.parse(body)?.read<List<String>>("$.invoices[*].invoice_number").orEmpty()
     }
 
     private fun getBillingGroup(): String {
-        client.newCall(
+        val body = callAiven("$hostAndPort/v1/billing-group")
+        return JsonPath.parse(body)?.read<String>("$.billing_groups[0].billing_group_id").orEmpty()
+    }
+
+
+    private fun callAiven(aivenApiUrl: String): String {
+        return client.newCall(
             Request.Builder()
-                .url("$hostAndPort/v1/billing-group")
+                .url(aivenApiUrl)
                 .addHeader("authorization", "aivenv1 $token")
                 .build()
         ).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
-            val body = response.body!!.string()
-            println(body)
-            return JsonPath.parse(body)?.read<String>("$.billing_groups[0].billing_group_id").orEmpty()
+            if (!response.isSuccessful || response.body == null) throw IOException("Unexpected code $response")
+            response.body!!.string()
         }
     }
 }
