@@ -5,21 +5,20 @@ import com.nfeld.jsonpathkt.extension.read
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
+import java.util.concurrent.TimeUnit
 
-class Aiven(val token: String) {
+class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io") {
 
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
     fun getInvoiceData(): String {
 
         val billingGroupdId = getBillingGroup()
 
-
         val invoices = when {
-            billingGroupdId.isEmpty() -> emptyList<String>()
+            billingGroupdId.isEmpty() -> emptyList()
             else -> getInvoices(billingGroupdId)
         }
-        println(invoices)
         getInvoiceLines(invoices, billingGroupdId)
         return ""
     }
@@ -29,7 +28,7 @@ class Aiven(val token: String) {
             invoice_id to
                     client.newCall(
                         Request.Builder()
-                            .url("https://api.aiven.io/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
+                            .url("$hostAndPort/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
                             .addHeader("authorization", "aivenv1 $token")
                             .build()
                     ).execute().use { response ->
@@ -42,7 +41,7 @@ class Aiven(val token: String) {
     private fun getInvoices(billingGroupdId: String): List<String> {
         client.newCall(
             Request.Builder()
-                .url("https://api.aiven.io/v1/billing-group/$billingGroupdId/invoice")
+                .url("$hostAndPort/v1/billing-group/$billingGroupdId/invoice")
                 .addHeader("authorization", "aivenv1 $token")
                 .build()
         ).execute().use { response ->
@@ -55,12 +54,13 @@ class Aiven(val token: String) {
     private fun getBillingGroup(): String {
         client.newCall(
             Request.Builder()
-                .url("https://api.aiven.io/v1/billing-group")
+                .url("$hostAndPort/v1/billing-group")
                 .addHeader("authorization", "aivenv1 $token")
                 .build()
         ).execute().use { response ->
             if (!response.isSuccessful) throw IOException("Unexpected code $response")
             val body = response.body!!.string()
+            println(body)
             return JsonPath.parse(body)?.read<String>("$.billing_groups[0].billing_group_id").orEmpty()
         }
     }

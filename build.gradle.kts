@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version("1.4.20")
+    kotlin("jvm") version ("1.4.20")
     kotlin("plugin.serialization") version "1.4.20"
     application
 }
@@ -24,7 +24,7 @@ val log4jVersion = "2.13.3"
 val assertJVersion = "3.18.1"
 val prometheusVersion = "0.9.0"
 val micrometerVersion = "1.5.2"
-val serializerVersion="0.20.0"
+val serializerVersion = "0.20.0"
 
 
 dependencies {
@@ -45,10 +45,14 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
-    implementation ("com.nfeld.jsonpathkt:jsonpathkt:2.0.0")
+    implementation("com.nfeld.jsonpathkt:jsonpathkt:2.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertJVersion")
+    testImplementation("io.ktor:ktor-server-test-host:1.5.2")
+    testImplementation("com.marcinziolo:kotlin-wiremock:1.0.0")
+    testCompile ("com.github.tomakehurst:wiremock-jre8:2.27.2")
+
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
 
 }
