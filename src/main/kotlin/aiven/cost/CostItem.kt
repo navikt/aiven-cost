@@ -1,0 +1,47 @@
+package aiven.cost
+
+import io.ktor.util.*
+import java.text.SimpleDateFormat
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
+
+data class CostItem(
+    val month: YearMonth,
+    val team: String,
+    val service: String,
+    val environment: String,
+    val costInEuros: Double?
+) {
+
+}
+
+fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
+    return CostItem(
+        costInEuros = invoiceLine.getLineTotal()?.toEuros(),
+        service = invoiceLine.getServiceType().orEmpty(),
+        month = invoiceLine.getBeginTimestamp()?.toYearMonth()!!,
+        team = invoiceLine.getServiceName()?.getTeamName().orEmpty(),
+        environment = invoiceLine.getProjectName()!!.toEnvironment()
+    )
+}
+
+fun String.toEnvironment(): String {
+    //"project_name":"nav-dev",
+    return this.split("-")[1]
+}
+
+fun Double.toEuros(): Double {
+    return this.times(0.85)
+}
+
+fun String.toYearMonth(): YearMonth {
+    //"timestamp_begin":"2021-03-01T00:00:00Z",
+    return YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+}
+
+fun String.getTeamName(): String {
+    //"service_name":"elastic-dolly-testdata-gjeter",
+    return this.split("-")[1]
+}
+
+
