@@ -20,7 +20,7 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
         costInEuros = invoiceLine.getLineTotal()?.toEuros(),
         service = invoiceLine.getServiceType().orEmpty(),
         month = invoiceLine.getBeginTimestamp()?.toYearMonth()!!,
-        team = invoiceLine.getServiceName()?.getTeamName().orEmpty(),
+        team = invoiceLine.getServiceName()?.getTeamName(invoiceLine.getServiceType()!!).orEmpty(),
         environment = invoiceLine.getProjectName()!!.toEnvironment()
     )
 }
@@ -39,9 +39,12 @@ fun String.toYearMonth(): YearMonth {
     return YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
 }
 
-fun String.getTeamName(): String {
+fun String.getTeamName(serviceType: String = ""): String {
     //"service_name":"elastic-dolly-testdata-gjeter",
+    if (serviceType.isPlatform()) return "nais"
     return this.split("-")[1]
 }
 
-
+fun String.isPlatform(): Boolean {
+    return this.equals("kafka")
+}
