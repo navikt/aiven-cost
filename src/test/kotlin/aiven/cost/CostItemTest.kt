@@ -23,7 +23,7 @@ class CostItemTest {
 
         assertEquals("teamnavn", costItem.team)
         assertEquals("dev", costItem.environment)
-        assertEquals(1.7, costItem.costInEuros)
+        assertEquals("1.7", costItem.costInEuros)
         assertEquals(YearMonth.of(2021, Month.MARCH), costItem.month)
         assertEquals("elastic", costItem.service)
 

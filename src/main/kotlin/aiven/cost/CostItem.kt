@@ -10,20 +10,20 @@ data class CostItem(
     val team: String,
     val service: String,
     val environment: String,
-    val costInEuros: Double?
+    val costInEuros: String
 ) {
 
 }
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
     return CostItem(
-        costInEuros = invoiceLine.getLineTotal()?.toEuros(),
-        service = invoiceLine.getServiceType()?.getService(invoiceLine.getLineType()!!).orEmpty(),
-        month = invoiceLine.getBeginTimestamp()?.toYearMonth()!!,
-        team = invoiceLine.getServiceName()?.getTeamName(
-            invoiceLine.getServiceType()!!,
-            invoiceLine.getLineType()!!).orEmpty(),
-        environment = invoiceLine.getProjectName()!!.toEnvironment()
+        costInEuros = invoiceLine.getLineTotal().toEuros(),
+        service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
+        month = invoiceLine.getBeginTimestamp().toYearMonth(),
+        team = invoiceLine.getServiceName().getTeamName(
+            invoiceLine.getServiceType(),
+            invoiceLine.getLineType()),
+        environment = invoiceLine.getProjectName().toEnvironment()
     )
 }
 
@@ -32,8 +32,8 @@ fun String.toEnvironment(): String {
     return this.split("-")[1]
 }
 
-fun Double.toEuros(): Double {
-    return this.times(0.85)
+fun String.toEuros(): String {
+    return this.toDouble().times(0.85).toString()
 }
 
 fun String.toYearMonth(): YearMonth {
