@@ -60,6 +60,5 @@ class CostItemTest {
         assertEquals("nais", costItem.team)
         assertEquals("support", costItem.service)
     }
-
 }
 

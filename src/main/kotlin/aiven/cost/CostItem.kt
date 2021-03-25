@@ -18,9 +18,11 @@ data class CostItem(
 fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
     return CostItem(
         costInEuros = invoiceLine.getLineTotal()?.toEuros(),
-        service = invoiceLine.getServiceType().orEmpty(),
+        service = invoiceLine.getServiceType()?.getService(invoiceLine.getLineType()!!).orEmpty(),
         month = invoiceLine.getBeginTimestamp()?.toYearMonth()!!,
-        team = invoiceLine.getServiceName()?.getTeamName(invoiceLine.getServiceType()!!).orEmpty(),
+        team = invoiceLine.getServiceName()?.getTeamName(
+            invoiceLine.getServiceType()!!,
+            invoiceLine.getLineType()!!).orEmpty(),
         environment = invoiceLine.getProjectName()!!.toEnvironment()
     )
 }
@@ -39,12 +41,18 @@ fun String.toYearMonth(): YearMonth {
     return YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
 }
 
-fun String.getTeamName(serviceType: String = ""): String {
+fun String.getTeamName(serviceType: String = "", lineType: String = ""): String {
     //"service_name":"elastic-dolly-testdata-gjeter",
     if (serviceType.isPlatform()) return "nais"
+    if (lineType.equals("extra_charge")) return "nais"
     return this.split("-")[1]
 }
 
 fun String.isPlatform(): Boolean {
     return this.equals("kafka")
+}
+
+fun String.getService(lineType: String = ""): String {
+    if (lineType.equals("extra_charge")) return "support"
+    return this
 }
