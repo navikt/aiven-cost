@@ -1,4 +1,4 @@
-package aiven.cost
+package io.nais.cost.aiven
 
 data class InvoiceLine(
     val invoiceId: String,

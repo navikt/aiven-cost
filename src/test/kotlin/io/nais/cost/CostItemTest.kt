@@ -1,5 +1,6 @@
-package aiven.cost
+package io.nais.cost
 
+import io.nais.cost.aiven.InvoiceLine
 import org.junit.jupiter.api.Test
 import java.time.Month
 import java.time.YearMonth

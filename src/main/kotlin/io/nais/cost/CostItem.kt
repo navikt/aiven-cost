@@ -1,5 +1,6 @@
-package aiven.cost
+package io.nais.cost
 
+import io.nais.cost.aiven.InvoiceLine
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 

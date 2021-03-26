@@ -1,7 +1,6 @@
-package aiven.cost
+package io.nais.cost
 
 import io.ktor.application.*
-import io.ktor.config.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.metrics.micrometer.*
@@ -16,6 +15,7 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.nais.cost.aiven.Aiven
 import io.prometheus.client.CollectorRegistry
 import org.slf4j.event.Level
 
@@ -51,7 +51,7 @@ fun Application.aivenApi() {
     }
     val configuration = Configuration()
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
-    invoiceData.map { }
+    val costItems = invoiceData.map { fromInvoiceLine(it) }
     log.info("fetched data from aiven: ${invoiceData.size}")
 
 

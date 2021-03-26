@@ -1,4 +1,4 @@
-package aiven.cost
+package io.nais.cost
 
 import io.ktor.http.*
 import io.ktor.server.testing.*

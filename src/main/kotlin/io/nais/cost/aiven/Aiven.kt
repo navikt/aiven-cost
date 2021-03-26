@@ -1,4 +1,4 @@
-package aiven.cost
+package io.nais.cost.aiven
 
 import com.nfeld.jsonpathkt.JsonPath
 import com.nfeld.jsonpathkt.extension.read

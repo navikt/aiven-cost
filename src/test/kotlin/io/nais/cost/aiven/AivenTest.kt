@@ -1,4 +1,4 @@
-package aiven.cost
+package io.nais.cost.aiven
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import io.nais.cost.aiven.Aiven
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

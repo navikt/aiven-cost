@@ -1,4 +1,4 @@
-package aiven.cost
+package io.nais.cost
 
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import com.natpryce.konfig.EnvironmentVariables
