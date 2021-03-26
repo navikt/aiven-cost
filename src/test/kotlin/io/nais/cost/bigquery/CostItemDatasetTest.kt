@@ -14,6 +14,7 @@ class CostItemDatasetTest {
             "abc", YearMonth.of(2021, Month.JANUARY), "nais", "kafka", "dev", "1.00"
         )
         val rowContent: MutableMap<String, Any> = HashMap()
+        rowContent["invoiceId"] = "abc"
         rowContent["environment"] = "dev"
         rowContent["team"] = "nais"
         rowContent["month"] = "2021-01"

@@ -29,6 +29,10 @@ spec:
   schema: |
     [
       {
+        "name": "invoiceId",
+        "type": "STRING"
+      },
+      {
         "name": "environment",
         "type": "STRING"
       },
