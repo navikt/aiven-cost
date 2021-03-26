@@ -3,13 +3,13 @@ kind: BigQueryDataset
 metadata:
   annotations:
     cnrm.cloud.google.com/delete-contents-on-destroy: "false"
-  name: aiven-cost
+  name: aivencost
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
 spec:
   description: "Aiven Cost"
-  friendlyName: aiven-cost
+  friendlyName: aivencost
   location: europe-north1
 
 ---
@@ -17,15 +17,15 @@ spec:
 apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
 kind: BigQueryTable
 metadata:
-  name: cost-items
+  name: costitems
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
 spec:
   description: "Aiven Cost"
   datasetRef:
-    name: aiven-cost
-  friendlyName: cost-items
+    name: aivencost
+  friendlyName: costitems
   schema: |
     [
       {
