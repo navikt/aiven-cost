@@ -46,12 +46,13 @@ dependencies {
     implementation("io.ktor:ktor-auth:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("com.nfeld.jsonpathkt:jsonpathkt:2.0.0")
+    implementation ("com.google.cloud:google-cloud-bigquery:1.127.11")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertJVersion")
     testImplementation("io.ktor:ktor-server-test-host:1.5.2")
     testImplementation("com.marcinziolo:kotlin-wiremock:1.0.0")
-    testCompile ("com.github.tomakehurst:wiremock-jre8:2.27.2")
+    testImplementation ("com.github.tomakehurst:wiremock-jre8:2.27.2")
 
     runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
 
