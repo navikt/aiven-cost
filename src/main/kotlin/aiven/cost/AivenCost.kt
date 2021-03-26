@@ -51,7 +51,9 @@ fun Application.aivenApi() {
     }
     val configuration = Configuration()
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
-    log.info("fetched data from aiven: ${invoiceData.keys.size}")
+    invoiceData.map { }
+    log.info("fetched data from aiven: ${invoiceData.size}")
+
 
 }
 

@@ -1,28 +1,27 @@
 package aiven.cost
 
-import io.ktor.util.*
-import java.text.SimpleDateFormat
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 data class CostItem(
+    val invoiceId: String,
     val month: YearMonth,
     val team: String,
     val service: String,
     val environment: String,
     val costInEuros: String
-) {
-
-}
+)
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
     return CostItem(
+        invoiceId = invoiceLine.invoiceId,
         costInEuros = invoiceLine.getLineTotal().toEuros(),
         service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
         month = invoiceLine.getBeginTimestamp().toYearMonth(),
         team = invoiceLine.getServiceName().getTeamName(
             invoiceLine.getServiceType(),
-            invoiceLine.getLineType()),
+            invoiceLine.getLineType()
+        ),
         environment = invoiceLine.getProjectName().toEnvironment()
     )
 }

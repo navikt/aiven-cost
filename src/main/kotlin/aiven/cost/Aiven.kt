@@ -11,18 +11,18 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
-    fun getInvoiceData(): Map<String, List<InvoiceLine>> =
+    fun getInvoiceData(): List<InvoiceLine> =
         getBillingGroup()?.let {
-            getInvoices(it)?.let { invoices -> toInvoiceMap(invoices, it) }
+            getInvoices(it)?.let { invoices -> flattenToInvoiceLines(invoices, it) }
         }.orEmpty()
 
-    private fun toInvoiceMap(invoices: List<String>, billingGroupdId: String): Map<String, List<InvoiceLine>> =
-        invoices.map { invoice_id -> invoice_id to getInvoiceLines(billingGroupdId, invoice_id) }.toMap()
+    private fun flattenToInvoiceLines(invoices: List<String>, billingGroupdId: String): List<InvoiceLine> =
+        invoices.flatMap { invoiceId -> getInvoiceLines(billingGroupdId, invoiceId) }
 
-    private fun getInvoiceLines(billingGroupdId: String, invoice_id: String): List<InvoiceLine> {
-        val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoice_id/lines")
+    private fun getInvoiceLines(billingGroupdId: String, invoiceId: String): List<InvoiceLine> {
+        val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, String>>>("$.lines[*]").orEmpty()
-        return list.map { InvoiceLine(it) }.toList()
+        return list.map { InvoiceLine(invoiceId, it) }.toList()
     }
 
     private fun getInvoices(billingGroupdId: String): List<String>? {

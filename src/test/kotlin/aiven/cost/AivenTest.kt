@@ -144,9 +144,8 @@ class AivenTest {
 
         val aiven = Aiven(secret, "$host:$port")
         val invoiceData = aiven.getInvoiceData()
-        assertEquals(1, invoiceData.keys.size)
-        assertEquals(1, invoiceData[invoiceId]!!.size)
-        assertEquals("test-project", invoiceData[invoiceId]!![0].getProjectName())
+        assertEquals(1, invoiceData.size)
+        assertEquals("test-project", invoiceData.first().getProjectName())
 
         wireMockServer.stop()
     }
