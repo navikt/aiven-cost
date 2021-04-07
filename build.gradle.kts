@@ -29,6 +29,7 @@ val serializerVersion = "0.20.0"
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
     implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("com.natpryce:konfig:1.6.10.0")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
@@ -56,7 +57,6 @@ dependencies {
     testImplementation("com.marcinziolo:kotlin-wiremock:1.0.0")
     testImplementation ("com.github.tomakehurst:wiremock-jre8:2.27.2")
 
-    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.4.20")
 
 }
 java {
