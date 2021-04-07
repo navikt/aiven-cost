@@ -27,32 +27,19 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
     )
 }
 
-fun String.toEnvironment(): String {
-    //"project_name":"nav-dev",
-    return this.split("-")[1]
-}
+fun String.toEnvironment() = this.split("-")[1]
 
-fun String.toEuros(): String {
-    return this.toDouble().times(0.85).toString()
-}
+fun String.toEuros() = this.toDouble().times(0.85).toString()
 
-fun String.toYearMonth(): YearMonth {
-    //"timestamp_begin":"2021-03-01T00:00:00Z",
-    return YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
-}
+fun String.toYearMonth(): YearMonth = YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
 
-fun String.getTeamName(serviceType: String = "", lineType: String = ""): String {
-    //"service_name":"elastic-dolly-testdata-gjeter",
-    if (serviceType.isPlatform()) return "nais"
-    if (lineType.equals("extra_charge")) return "nais"
-    return this.split("-")[1]
-}
+fun String.getTeamName(serviceType: String = "", lineType: String = "") =
+    when {
+        serviceType.isPlatform() -> "nais"
+        lineType == "extra_charge" -> "nais"
+        else -> this.split("-")[1]
+    }
 
-fun String.isPlatform(): Boolean {
-    return this.equals("kafka")
-}
+fun String.isPlatform() = this == "kafka"
 
-fun String.getService(lineType: String = ""): String {
-    if (lineType.equals("extra_charge")) return "support"
-    return this
-}
+fun String.getService(lineType: String = "") = if (lineType == "extra_charge") "support" else this
