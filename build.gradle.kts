@@ -46,7 +46,9 @@ dependencies {
     implementation("io.ktor:ktor-auth:$ktorVersion")
     implementation("io.ktor:ktor-serialization:$ktorVersion")
     implementation("com.nfeld.jsonpathkt:jsonpathkt:2.0.0")
-    implementation ("com.google.cloud:google-cloud-bigquery:1.127.11")
+    implementation ("com.google.cloud:google-cloud-bigquery:1.127.11"){
+        exclude(group="com.fasterxml.jackson.core", module = "jackson-core")
+    }
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertJVersion")
