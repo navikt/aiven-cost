@@ -36,9 +36,10 @@ fun String.toYearMonth() = YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DAT
 
 fun String.getTeamName(serviceType: String = "", lineType: String = "") =
     when {
-        this.isNullOrEmpty() -> ""
         serviceType.isPlatform() -> "nais"
         lineType == "extra_charge" -> "nais"
+        this.isNullOrEmpty() -> ""
+        !this.contains("-") -> this
         else -> this.split("-")[1]
     }
 

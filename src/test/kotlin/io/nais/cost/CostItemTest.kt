@@ -31,6 +31,16 @@ class CostItemTest {
     }
 
     @Test
+    fun `get team name`() {
+        assertEquals("audun", "audun".getTeamName("", ""))
+        assertEquals("teamaudun", "audun-teamaudun".getTeamName("", ""))
+        assertEquals("teamaudun", "audun-teamaudun-audun".getTeamName("", ""))
+        assertEquals("", "".getTeamName("", ""))
+        assertEquals("nais", "whatever".getTeamName("kafka", ""))
+        assertEquals("nais", "whatever".getTeamName("", "extra_charge"))
+    }
+
+    @Test
     fun `convert invoiceLine to costItem for kafka`() {
         val invoiceLine = InvoiceLine(
             "id",
