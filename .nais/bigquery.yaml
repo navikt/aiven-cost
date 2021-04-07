@@ -2,6 +2,7 @@ apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
 kind: BigQueryDataset
 metadata:
   annotations:
+    cnrm.cloud.google.com/project-id: "aiven-cost-nais-analy-pbh2c4a"
     cnrm.cloud.google.com/delete-contents-on-destroy: "false"
   name: aivencost
   namespace: "nais-analyse"
