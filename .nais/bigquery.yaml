@@ -27,6 +27,7 @@ metadata:
     "team": "nais-analyse"
 spec:
   description: "Aiven Cost"
+  resourceID: costitems
   datasetRef:
     name: aivencost
   friendlyName: costitems
