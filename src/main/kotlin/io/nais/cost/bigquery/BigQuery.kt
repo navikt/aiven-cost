@@ -16,22 +16,14 @@ class BigQuery {
     private val bigquery = BigQueryOptions.getDefaultInstance().service
 
     fun write(costItems: List<CostItem>): InsertAllResponse {
-
-        val tableId: TableId = TableId.of("aivencost", "costitems")
-        val builder = InsertAllRequest.newBuilder(tableId)
-
+        val builder = InsertAllRequest.newBuilder(TableId.of("aivencost", "costitems"))
         costItems.forEach {builder.addRow(toRow(it))}
 
-        val response: InsertAllResponse = bigquery.insertAll(builder.build())
+        val response = bigquery.insertAll(builder.build())
+        if (response.hasErrors()) response.insertErrors.entries.forEach { log.info("insertError: ${it.value}") }
 
-        if (response.hasErrors()) {
-            response.insertErrors.entries.forEach { entry ->
-                log.info("insertError ${entry.value}")
-            }
-        }
         return response
     }
-
 }
 
  fun toRow(costItem: CostItem): Map<String, Any> {
