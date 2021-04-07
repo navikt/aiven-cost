@@ -1,16 +1,17 @@
 package io.nais.cost
 
 import io.nais.cost.aiven.InvoiceLine
+import java.math.BigDecimal
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
 data class CostItem(
     val invoiceId: String,
-    val month: YearMonth,
+    val month: String,
     val team: String,
     val service: String,
     val environment: String,
-    val costInEuros: String
+    val costInEuros: BigDecimal
 )
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
@@ -29,9 +30,9 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
 
 fun String.toEnvironment() = this.split("-")[1]
 
-fun String.toEuros() = this.toDouble().times(0.85).toString()
+fun String.toEuros(): BigDecimal = BigDecimal.valueOf(this.toDouble().times(0.85))
 
-fun String.toYearMonth(): YearMonth = YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME)
+fun String.toYearMonth() = YearMonth.parse(this, DateTimeFormatter.ISO_ZONED_DATE_TIME).toString()
 
 fun String.getTeamName(serviceType: String = "", lineType: String = "") =
     when {

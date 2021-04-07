@@ -2,8 +2,6 @@ package io.nais.cost
 
 import io.nais.cost.aiven.InvoiceLine
 import org.junit.jupiter.api.Test
-import java.time.Month
-import java.time.YearMonth
 import kotlin.test.assertEquals
 
 class CostItemTest {
@@ -26,8 +24,8 @@ class CostItemTest {
 
         assertEquals("teamnavn", costItem.team)
         assertEquals("dev", costItem.environment)
-        assertEquals("1.7", costItem.costInEuros)
-        assertEquals(YearMonth.of(2021, Month.MARCH), costItem.month)
+        assertEquals("1.7", costItem.costInEuros.toPlainString())
+        assertEquals("2021-03", costItem.month)
         assertEquals("elastic", costItem.service)
 
     }

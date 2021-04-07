@@ -16,6 +16,7 @@ import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.nais.cost.aiven.Aiven
+import io.nais.cost.bigquery.BigQuery
 import io.prometheus.client.CollectorRegistry
 import org.slf4j.event.Level
 
@@ -53,6 +54,7 @@ fun Application.aivenApi() {
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
     val costItems = invoiceData.map { fromInvoiceLine(it) }
     log.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")
+    BigQuery().write(costItems)
 
 
 }

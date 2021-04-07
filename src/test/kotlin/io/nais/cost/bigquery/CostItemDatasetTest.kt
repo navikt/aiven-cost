@@ -1,17 +1,21 @@
 package io.nais.cost.bigquery
 
 import io.nais.cost.CostItem
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.Month
-import java.time.YearMonth
-import java.util.HashMap
-import kotlin.test.assertEquals
+import java.math.BigDecimal
+import java.util.*
 
 class CostItemDatasetTest {
     @Test
     fun `cost item can be converted to rowcontent`(){
         val costItem = CostItem(
-            "abc", YearMonth.of(2021, Month.JANUARY), "nais", "kafka", "dev", "1.00"
+            invoiceId = "abc",
+            environment = "dev",
+            team = "nais",
+            month = "2021-01",
+            service = "kafka",
+            costInEuros = BigDecimal("1.00")
         )
         val rowContent: MutableMap<String, Any> = HashMap()
         rowContent["invoiceId"] = "abc"
@@ -19,9 +23,9 @@ class CostItemDatasetTest {
         rowContent["team"] = "nais"
         rowContent["month"] = "2021-01"
         rowContent["service"] = "kafka"
-        rowContent["costInEuros"] = 1.00
+        rowContent["costInEuros"] = BigDecimal("1.00")
 
-        //assertEquals(rowContent, convertCostItemToRowContent(costItem))
+        assertThat(rowContent).containsAllEntriesOf(toRow(costItem))
 
     }
 
