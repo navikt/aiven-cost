@@ -30,7 +30,7 @@ spec:
   resourceID: costitems
   datasetRef:
     name: aivencost
-  friendlyName: costitems
+  friendlyName: costitems name
   schema: |
     [
       {
