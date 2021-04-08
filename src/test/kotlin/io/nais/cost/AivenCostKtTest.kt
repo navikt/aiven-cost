@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 
 class AivenCostKtTest {
 
-    @Disabled
     @Test
     internal fun `isready is ready`() {
         withTestApplication(

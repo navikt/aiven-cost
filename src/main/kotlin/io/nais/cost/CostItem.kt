@@ -28,7 +28,10 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
     )
 }
 
-fun String.toEnvironment() = this.split("-")[1]
+fun String.toEnvironment(): String {
+    val environment = this.split("-")[1]
+    return if (environment != "prod") "dev" else "prod"
+}
 
 fun String.toEuros(): BigDecimal = BigDecimal.valueOf(this.toDouble().times(0.85))
 
@@ -38,11 +41,17 @@ fun String.getTeamName(serviceType: String = "", lineType: String = "") =
     when {
         serviceType.isPlatform() -> "nais"
         lineType == "extra_charge" -> "nais"
-        this.isNullOrEmpty() -> ""
+        lineType == "credit_consumption" -> "nais"
         !this.contains("-") -> this
         else -> this.split("-")[1]
     }
 
 fun String.isPlatform() = this == "kafka"
 
-fun String.getService(lineType: String = "") = if (lineType == "extra_charge") "support" else this
+fun String.getService(lineType: String = "") =
+    when (lineType) {
+        "extra_charge" -> "support"
+        "credit_consumption" -> "credit"
+        else -> this
+    }
+
