@@ -34,9 +34,8 @@ class BigQuery {
     }
 
     private fun deleteContentFromTable() {
-        val query = "TRUNCATE TABLE $dataset.$table"
-        val newBuilder = QueryJobConfiguration.newBuilder(query)
-        val results = bigquery.query(newBuilder.build())
+        val query = "TRUNCATE TABLE `$project.$dataset.$table`"
+        val results = bigquery.query(QueryJobConfiguration.newBuilder(query).build())
         results.iterateAll().forEach { log.info("insertError: $it") }
     }
 }
