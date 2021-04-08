@@ -104,7 +104,7 @@ kind: IAMPolicyMember
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
-  name: aiven-cost-data-editor
+  name: aiven-cost-data-user
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
