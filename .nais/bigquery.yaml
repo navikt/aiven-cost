@@ -75,7 +75,7 @@ spec:
   resourceRef:
     apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
     kind: BigQueryDataset
-    external: projects/nais-analyse-2dcc/datasets/aivencost
+    external: projects/nais-analyse-prod-2dcc/datasets/aivencost
 
 ---
 
@@ -94,4 +94,4 @@ spec:
   resourceRef:
     apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
     kind: BigQueryTable
-    external: projects/nais-analyse-2dcc/datasets/aivencost/tables/costitems
+    external: projects/nais-analyse-prod-2dcc/datasets/aivencost/tables/costitems
