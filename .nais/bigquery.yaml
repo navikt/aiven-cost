@@ -2,7 +2,7 @@ apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
 kind: BigQueryDataset
 metadata:
   annotations:
-    cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
+      cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
     cnrm.cloud.google.com/delete-contents-on-destroy: "false"
   name: aivencost
   namespace: "nais-analyse"
@@ -13,7 +13,9 @@ spec:
   friendlyName: aivencost
   location: europe-north1
   resourceID: aivencost
-
+  access:
+  - role: WRITER
+    userByEmail: aiven-cost-nais-analy-pbh2c4a@nais-prod-020f.iam.gserviceaccount.com
 ---
 
 apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
