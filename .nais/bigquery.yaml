@@ -66,13 +66,13 @@ kind: IAMPolicyMember
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
-  name: aiven-cost-project-metadataviewer
+  name: aiven-cost-project-user
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
 spec:
   member: serviceAccount:aiven-cost-nais-analy-pbh2c4a@nais-prod-020f.iam.gserviceaccount.com
-  role: roles/bigquery.metadataViewer
+  role: roles/bigquery.user
   resourceRef:
     apiVersion: resourcemanager.cnrm.cloud.google.com/v1beta1
     kind: Project
@@ -92,25 +92,6 @@ metadata:
 spec:
   member: serviceAccount:aiven-cost-nais-analy-pbh2c4a@nais-prod-020f.iam.gserviceaccount.com
   role: roles/bigquery.dataEditor
-  resourceRef:
-    apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
-    kind: BigQueryTable
-    external: projects/nais-analyse-prod-2dcc/datasets/aivencost/tables/costitems
-
----
-
-apiVersion: iam.cnrm.cloud.google.com/v1beta1
-kind: IAMPolicyMember
-metadata:
-  annotations:
-    cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
-  name: aiven-cost-data-user
-  namespace: "nais-analyse"
-  labels:
-    "team": "nais-analyse"
-spec:
-  member: serviceAccount:aiven-cost-nais-analy-pbh2c4a@nais-prod-020f.iam.gserviceaccount.com
-  role: roles/bigquery.user
   resourceRef:
     apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
     kind: BigQueryTable
