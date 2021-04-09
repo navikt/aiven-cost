@@ -77,5 +77,24 @@ class CostItemTest {
         assertEquals("nais", costItem.team)
         assertEquals("support", costItem.service)
     }
+
+    @Test
+    fun `convert invoiceLine to costItem for test`() {
+        val invoiceLine = InvoiceLine(
+            "id",
+            mapOf(
+                "project_name" to "nav-23d2",
+                "line_total_usd" to "2.00",
+                "line_type" to "service_charge",
+                "service_name" to "mortenlj-test-kafka",
+                "service_type" to "kafka",
+                "timestamp_begin" to "2021-03-01T00:00:00Z",
+                "timestamp_end" to "2021-03-02T00:00:00Z",
+            )
+        )
+        val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
+        assertEquals("nais", costItem.team)
+        assertEquals("dev", costItem.environment)
+    }
 }
 

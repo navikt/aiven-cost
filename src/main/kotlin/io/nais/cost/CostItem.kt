@@ -29,8 +29,7 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): CostItem {
 }
 
 fun String.toEnvironment(): String {
-    val environment = this.split("-")[1]
-    return if (environment != "prod") "dev" else "prod"
+    return if (!this.contains("prod") ) "dev" else "prod"
 }
 
 fun String.toEuros(): BigDecimal = BigDecimal.valueOf(this.toDouble().times(0.85))
