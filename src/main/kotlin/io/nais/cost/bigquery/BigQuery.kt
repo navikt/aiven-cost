@@ -45,7 +45,7 @@ fun toRow(costItem: CostItem): Map<String, Any> {
         "invoiceId" to costItem.invoiceId,
         "environment" to costItem.environment,
         "team" to costItem.team,
-        "month" to costItem.month,
+        "date" to costItem.date,
         "service" to costItem.service,
         "costInEuros" to costItem.costInEuros
     )

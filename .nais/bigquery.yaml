@@ -46,7 +46,7 @@ spec:
         "type": "STRING"
       },
       {
-        "name": "month",
+        "name": "date",
         "type": "STRING"
       },
       {

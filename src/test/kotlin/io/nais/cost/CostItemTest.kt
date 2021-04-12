@@ -12,21 +12,21 @@ class CostItemTest {
             "id",
             mapOf(
                 "project_name" to "nav-dev",
-                "line_total_usd" to "2.00",
+                "line_total_usd" to "3.00",
                 "line_type" to "service_charge",
                 "service_name" to "elastic-teamnavn-appnavn",
                 "service_type" to "elastic",
                 "timestamp_begin" to "2021-03-01T00:00:00Z",
-                "timestamp_end" to "2021-03-02T00:00:00Z",
+                "timestamp_end" to "2021-03-04T00:00:00Z",
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
 
-        assertEquals("teamnavn", costItem.team)
-        assertEquals("dev", costItem.environment)
-        assertEquals("1.7", costItem.costInEuros.toPlainString())
-        assertEquals("2021-03", costItem.month)
-        assertEquals("elastic", costItem.service)
+        assertEquals("teamnavn", costItem.first().team)
+        assertEquals("dev", costItem.first().environment)
+        assertEquals("0.85", costItem.first().costInEuros.toPlainString())
+        assertEquals("2021-03-01", costItem.first().date)
+        assertEquals("elastic", costItem.first().service)
 
     }
 
@@ -55,8 +55,8 @@ class CostItemTest {
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
-        assertEquals("nais", costItem.team)
-        assertEquals("kafka", costItem.service)
+        assertEquals("nais", costItem.first().team)
+        assertEquals("kafka", costItem.first().service)
     }
 
     @Test
@@ -74,8 +74,8 @@ class CostItemTest {
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
-        assertEquals("nais", costItem.team)
-        assertEquals("support", costItem.service)
+        assertEquals("nais", costItem.first().team)
+        assertEquals("support", costItem.first().service)
     }
 
     @Test
@@ -93,8 +93,16 @@ class CostItemTest {
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
-        assertEquals("nais", costItem.team)
-        assertEquals("dev", costItem.environment)
+        assertEquals("nais", costItem.first().team)
+        assertEquals("dev", costItem.first().environment)
+    }
+
+
+    @Test
+    fun `get list of dates from begin and end timestamp`() {
+        assertEquals(7, getDateRangeFromInvoiceLine("2021-03-01T00:00:00Z", "2021-03-08T00:00:00Z").size)
+        assertEquals(8, getDateRangeFromInvoiceLine("2021-03-01T00:00:00Z", "2021-03-08T08:00:00Z").size)
+
     }
 }
 

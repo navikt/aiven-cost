@@ -166,7 +166,7 @@ class AivenTest {
         val invoiceLine = InvoiceLine("", map.first())
         val item = fromInvoiceLine(invoiceLine)
 
-        assertEquals("dev", item.environment)
+        assertEquals("dev", item.first().environment)
 
 
     }

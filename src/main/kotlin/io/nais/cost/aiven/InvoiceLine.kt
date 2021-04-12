@@ -10,5 +10,6 @@ data class InvoiceLine(
     fun getServiceName() = input["service_name"].orEmpty()
     fun getServiceType() = input["service_type"].orEmpty()
     fun getBeginTimestamp() = input["timestamp_begin"].orEmpty()
+    fun getEndTimestamp() = input["timestamp_end"].orEmpty()
 }
 

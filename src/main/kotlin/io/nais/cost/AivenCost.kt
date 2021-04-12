@@ -52,7 +52,7 @@ fun Application.aivenApi() {
     }
     val configuration = Configuration()
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
-    val costItems = invoiceData.map { fromInvoiceLine(it) }
+    val costItems = invoiceData.flatMap { fromInvoiceLine(it) }
     log.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")
     BigQuery().write(costItems)
 

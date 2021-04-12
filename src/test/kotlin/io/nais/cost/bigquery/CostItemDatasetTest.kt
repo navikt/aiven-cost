@@ -13,7 +13,7 @@ class CostItemDatasetTest {
             invoiceId = "abc",
             environment = "dev",
             team = "nais",
-            month = "2021-01",
+            date = "2021-01-01",
             service = "kafka",
             costInEuros = BigDecimal("1.00")
         )
@@ -21,7 +21,7 @@ class CostItemDatasetTest {
         rowContent["invoiceId"] = "abc"
         rowContent["environment"] = "dev"
         rowContent["team"] = "nais"
-        rowContent["month"] = "2021-01"
+        rowContent["date"] = "2021-01-01"
         rowContent["service"] = "kafka"
         rowContent["costInEuros"] = BigDecimal("1.00")
 
