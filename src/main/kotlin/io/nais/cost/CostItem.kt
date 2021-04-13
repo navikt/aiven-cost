@@ -26,7 +26,7 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
             CostItem(
                 invoiceId = invoiceLine.invoiceId,
                 costInEuros =
-                    invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), RoundingMode.HALF_UP),
+                    invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
                     service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
                     date = DateTimeFormatter.ISO_DATE.format(currentDate),
                     team = invoiceLine.getServiceName().getTeamName(
