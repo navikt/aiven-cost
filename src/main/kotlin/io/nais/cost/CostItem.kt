@@ -2,6 +2,7 @@ package io.nais.cost
 
 import io.nais.cost.aiven.InvoiceLine
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.ZonedDateTime
@@ -25,7 +26,7 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
             CostItem(
                 invoiceId = invoiceLine.invoiceId,
                 costInEuros =
-                    invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage)),
+                    invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), RoundingMode.HALF_UP),
                     service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
                     date = DateTimeFormatter.ISO_DATE.format(currentDate),
                     team = invoiceLine.getServiceName().getTeamName(
