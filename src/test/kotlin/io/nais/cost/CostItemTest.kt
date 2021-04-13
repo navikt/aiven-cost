@@ -102,6 +102,7 @@ class CostItemTest {
     fun `get list of dates from begin and end timestamp`() {
         assertEquals(7, getDateRangeFromInvoiceLine("2021-03-01T00:00:00Z", "2021-03-08T00:00:00Z").size)
         assertEquals(8, getDateRangeFromInvoiceLine("2021-03-01T00:00:00Z", "2021-03-08T08:00:00Z").size)
+        assertEquals(1, getDateRangeFromInvoiceLine("2021-03-01T00:00:00Z", "2021-03-01T08:00:00Z").size)
 
     }
 }
