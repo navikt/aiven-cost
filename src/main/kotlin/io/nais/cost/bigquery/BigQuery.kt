@@ -3,6 +3,7 @@ package io.nais.cost.bigquery
 import com.google.cloud.bigquery.*
 import io.nais.cost.CostItem
 import org.slf4j.LoggerFactory
+import java.time.format.DateTimeFormatter
 
 class BigQuery {
     val table = "costitems"
@@ -45,7 +46,7 @@ fun toRow(costItem: CostItem): Map<String, Any> {
         "invoiceId" to costItem.invoiceId,
         "environment" to costItem.environment,
         "team" to costItem.team,
-        "date" to costItem.date,
+        "date" to DateTimeFormatter.ISO_DATE.format(costItem.date),
         "service" to costItem.service,
         "costInEuros" to costItem.costInEuros
     )

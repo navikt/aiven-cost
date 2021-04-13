@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter
 
 data class CostItem(
     val invoiceId: String,
-    val date: String,
+    val date: LocalDate,
     val team: String,
     val service: String,
     val environment: String,
@@ -28,7 +28,7 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
                 costInEuros =
                     invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
                     service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
-                    date = DateTimeFormatter.ISO_DATE.format(currentDate),
+                    date = currentDate,
                     team = invoiceLine.getServiceName().getTeamName(
                         invoiceLine.getServiceType(),
                         invoiceLine.getLineType()

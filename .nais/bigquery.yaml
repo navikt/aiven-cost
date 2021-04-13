@@ -47,7 +47,7 @@ spec:
       },
       {
         "name": "date",
-        "type": "STRING"
+        "type": "DATE"
       },
       {
         "name": "service",
