@@ -67,12 +67,14 @@ fun Application.aivenApi() {
 
 fun scheduleJobEveryDay(configuration: Configuration) {
     val osloTz = ZoneId.of("Europe/Oslo")
+    val start = ZonedDateTime.now(osloTz).next(LocalTime.of(12, 0, 0))
     fixedRateTimer(
         name = "AivenJobRunner",
         daemon = true,
-        startAt = ZonedDateTime.now(osloTz).next(LocalTime.of(12, 0, 0)),
+        startAt = start,
         period = Duration.ofDays(1).toMillis()
-    ){ runAivenJob(configuration)}
+    ) { runAivenJob(configuration) }
+    LOGGER.info("scheduled Aiven job to run once each day, beginning on $start")
 }
 
 private fun runAivenJob(configuration: Configuration) {
@@ -81,12 +83,12 @@ private fun runAivenJob(configuration: Configuration) {
     LOGGER.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")
     BigQuery().write(costItems)
 }
-fun ZonedDateTime.next(atTime: LocalTime): Date {
-    return if (this.toLocalTime().isAfter(atTime)) {
-        Date.from(this.plusDays(1).withHour(atTime.hour).withMinute(atTime.minute).withSecond(atTime.second).toInstant())
-    } else {
-        Date.from(this.withHour(atTime.hour).withMinute(atTime.minute).withSecond(atTime.second).toInstant())
-    }
-}
 
-
+fun ZonedDateTime.next(timeOfDay: LocalTime): Date =
+    Date.from(
+        this.plusDays(if (toLocalTime().isAfter(timeOfDay)) 1 else 0)
+            .withHour(timeOfDay.hour)
+            .withMinute(timeOfDay.minute)
+            .withSecond(timeOfDay.second)
+            .toInstant()
+    )
