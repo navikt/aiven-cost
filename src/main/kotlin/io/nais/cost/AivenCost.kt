@@ -18,7 +18,17 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.nais.cost.aiven.Aiven
 import io.nais.cost.bigquery.BigQuery
 import io.prometheus.client.CollectorRegistry
+import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
+import java.time.Duration
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.util.*
+import kotlin.concurrent.fixedRateTimer
+
+private val LOGGER = LoggerFactory.getLogger("AivenCost")
+
 
 fun Application.aivenApi() {
     install(CallLogging) {
@@ -51,11 +61,32 @@ fun Application.aivenApi() {
         nais()
     }
     val configuration = Configuration()
+    runAivenJob(configuration)
+    scheduleJobEveryDay(configuration)
+}
+
+fun scheduleJobEveryDay(configuration: Configuration) {
+    val osloTz = ZoneId.of("Europe/Oslo")
+    fixedRateTimer(
+        name = "AivenJobRunner",
+        daemon = true,
+        startAt = ZonedDateTime.now(osloTz).next(LocalTime.of(12, 0, 0)),
+        period = Duration.ofDays(1).toMillis()
+    ){ runAivenJob(configuration)}
+}
+
+private fun runAivenJob(configuration: Configuration) {
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
     val costItems = invoiceData.flatMap { fromInvoiceLine(it) }
-    log.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")
+    LOGGER.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")
     BigQuery().write(costItems)
-
-
 }
+fun ZonedDateTime.next(atTime: LocalTime): Date {
+    return if (this.toLocalTime().isAfter(atTime)) {
+        Date.from(this.plusDays(1).withHour(atTime.hour).withMinute(atTime.minute).withSecond(atTime.second).toInstant())
+    } else {
+        Date.from(this.withHour(atTime.hour).withMinute(atTime.minute).withSecond(atTime.second).toInstant())
+    }
+}
+
 
