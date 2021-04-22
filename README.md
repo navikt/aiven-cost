@@ -1,3 +1,3 @@
 # aiven-cost
 
-Bacause every project must have one!
+Because every project must have one!
