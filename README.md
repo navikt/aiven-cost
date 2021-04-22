@@ -1,3 +1,3 @@
 # aiven-cost
 
-Because every project must have a README.md :)
+Because every project must have a README.md!
