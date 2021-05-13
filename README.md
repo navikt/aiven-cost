@@ -9,3 +9,4 @@ https://datastudio.google.com/u/1/reporting/417b0a1d-b307-4a6d-a699-77a6ab239661
 This is done by fetching invoices from the Aiven billing API every month.
 
 Aiven products supported are: 
+- kafka
