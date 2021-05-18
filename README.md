@@ -11,3 +11,4 @@ This is done by fetching invoices from the Aiven billing API every month.
 Aiven products supported are: 
 - kafka
 - influx
+- elastic
