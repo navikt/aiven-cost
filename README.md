@@ -14,5 +14,5 @@ Aiven products supported are:
 - elastic
 
 Owners:
- Team Nais-Analyse (Gøran, Truls and
+ Team Nais-Analyse (Gøran, Truls and Audun
 
