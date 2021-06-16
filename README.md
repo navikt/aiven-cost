@@ -14,7 +14,7 @@ Aiven products supported are:
 - elastic
 - redis?
 
-also, but no
+also, but not limited by
 
 Owners:
  Team Nais-Analyse (Gøran, Truls and Audun)
