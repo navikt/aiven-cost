@@ -20,8 +20,6 @@ jobs:
           "RESOURCE": ".nais/bigquery.yaml"
   build:
     name: "build"
-    needs:
-      - "bigquery"
     runs-on: "ubuntu-18.04"
     steps:
       - uses: "actions/checkout@v2"
