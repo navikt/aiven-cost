@@ -12,7 +12,6 @@ Aiven products supported are:
 - kafka
 - influxDB
 - elastic
-- redis?
 
 also, but not limited by
 
