@@ -10,7 +10,7 @@ This is done by fetching invoices from the Aiven billing API every month. The da
 
 Aiven products supported are: 
 - kafka
-- influxDB
+- influxDB /
 - elastic
 
 also, but not limited by
