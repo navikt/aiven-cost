@@ -12,6 +12,8 @@ spec:
   description: "Aiven Cost"
   friendlyName: aivencost
   location: europe-north1
+  projectRef:
+    external: nais-analyse-prod-2dcc
   resourceID: aivencost
 
 ---
