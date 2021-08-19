@@ -13,7 +13,7 @@ Aiven products supported are:
 - influxDB
 - elastic
 
-also, but not limited 
+also, but not limited to
 
 Owners:
  Team Nais-Analyse (Gøran, Truls and Audun)
