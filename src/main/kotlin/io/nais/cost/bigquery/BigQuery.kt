@@ -33,10 +33,13 @@ class BigQuery {
         val builder = InsertAllRequest.newBuilder(TableId.of(dataset, table))
         costItems.forEach { builder.addRow(toRow(it)) }
         val request = builder.build()
-
+        log.info("inserting ${costItems.size} items")
         try {
             val response = bigquery.service.insertAll(request)
+            log.info("inserted lineitems to bigquery")
             if (response.hasErrors()) response.insertErrors.entries.forEach { log.error("insertError: ${it.value}") }
+            else log.info("no errors when inserting logitems")
+
         } catch (e: BigQueryException) {
             errorCounter.countError()
             log.error(e.message)
