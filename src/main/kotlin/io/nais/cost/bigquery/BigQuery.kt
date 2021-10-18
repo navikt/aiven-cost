@@ -4,6 +4,7 @@ import com.google.cloud.bigquery.*
 import io.nais.cost.BiqQueryErrorCounter
 import io.nais.cost.CostItem
 import org.slf4j.LoggerFactory
+import java.time.Duration
 import java.time.format.DateTimeFormatter
 
 class BigQuery {
@@ -27,7 +28,8 @@ class BigQuery {
     fun write(costItems: List<CostItem>) {
         if (costItems.isNotEmpty()) {
             deleteContentFromTable()
-            Thread.sleep(120 * 1000L)
+            log.info("ZZZZZ")
+            Thread.sleep(Duration.ofSeconds(120L).toMillis())
             log.info("woke up after truncating")
         }
         val builder = InsertAllRequest.newBuilder(TableId.of(dataset, table))
@@ -51,7 +53,7 @@ class BigQuery {
         log.info("truncating table $table")
         val query = "TRUNCATE TABLE `$project.$dataset.$table`"
         val results = bigquery.service.query(QueryJobConfiguration.newBuilder(query).build())
-        log.info("truncatied table $table")
+        log.info("truncated table $table")
         results.iterateAll().forEach { log.info("insertError: $it") }
     }
 }
