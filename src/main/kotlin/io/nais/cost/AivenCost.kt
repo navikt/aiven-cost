@@ -67,7 +67,7 @@ fun Application.aivenApi() {
 
 fun scheduleJobEveryDay(configuration: Configuration) {
     val osloTz = ZoneId.of("Europe/Oslo")
-    val start = ZonedDateTime.now(osloTz).next(LocalTime.of(12, 0, 0))
+    val start = ZonedDateTime.now(osloTz).next(LocalTime.of(14, 3,0, 0))
     fixedRateTimer(
         name = "AivenJobRunner",
         daemon = true,
