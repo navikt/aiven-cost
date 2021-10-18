@@ -28,7 +28,7 @@ class BigQuery {
         if (costItems.isNotEmpty()) {
             deleteContentFromTable()
             Thread.sleep(120 * 1000L)
-
+            log.info("woke up after truncating")
         }
         val builder = InsertAllRequest.newBuilder(TableId.of(dataset, table))
         costItems.forEach { builder.addRow(toRow(it)) }
@@ -48,8 +48,10 @@ class BigQuery {
     }
 
     private fun deleteContentFromTable() {
+        log.info("truncating table $table")
         val query = "TRUNCATE TABLE `$project.$dataset.$table`"
         val results = bigquery.service.query(QueryJobConfiguration.newBuilder(query).build())
+        log.info("truncatied table $table")
         results.iterateAll().forEach { log.info("insertError: $it") }
     }
 }
