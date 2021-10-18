@@ -27,6 +27,8 @@ class BigQuery {
     fun write(costItems: List<CostItem>) {
         if (costItems.isNotEmpty()) {
             deleteContentFromTable()
+            Thread.sleep(120 * 1000L)
+
         }
         val builder = InsertAllRequest.newBuilder(TableId.of(dataset, table))
         costItems.forEach { builder.addRow(toRow(it)) }
