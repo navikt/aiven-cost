@@ -19,21 +19,21 @@ data class CostItem(
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
     val range =
-        getDateRangeFromInvoiceLine(invoiceLine.getBeginTimestamp(), invoiceLine.getEndTimestamp())
+        getDateRangeFromInvoiceLine(invoiceLine.beginTimestamp, invoiceLine.endTimestamp)
     val noOfDaysInRage = range.size.toLong()
     return range
         .map { currentDate ->
             CostItem(
                 invoiceId = invoiceLine.invoiceId,
                 costInEuros =
-                    invoiceLine.getLineTotal().toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
-                    service = invoiceLine.getServiceType().getService(invoiceLine.getLineType()),
+                    invoiceLine.lineTotal.toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
+                    service = invoiceLine.serviceType.getService(invoiceLine.lineType),
                     date = currentDate,
-                    team = invoiceLine.getServiceName().getTeamName(
-                        invoiceLine.getServiceType(),
-                        invoiceLine.getLineType()
+                    team = invoiceLine.serviceName.getTeamName(
+                        invoiceLine.serviceType,
+                        invoiceLine.lineType
                     ),
-                    environment = invoiceLine.getProjectName().toEnvironment()
+                    environment = invoiceLine.projectName.toEnvironment()
                 )
         }
 }

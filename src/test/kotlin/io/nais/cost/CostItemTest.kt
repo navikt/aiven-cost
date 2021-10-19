@@ -19,7 +19,7 @@ class CostItemTest {
                 "service_name" to "elastic-teamnavn-appnavn",
                 "service_type" to "elastic",
                 "timestamp_begin" to "2021-03-01T00:00:00Z",
-                "timestamp_end" to "2021-03-04T00:00:00Z",
+                "timestamp_end" to "2021-03-04T00:00:00Z"
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
@@ -27,7 +27,7 @@ class CostItemTest {
         assertEquals("teamnavn", costItem.first().team)
         assertEquals("dev", costItem.first().environment)
         assertEquals("0.85", costItem.first().costInEuros.toPlainString())
-        assertEquals(LocalDate.of(2021, Month.MARCH,1), costItem.first().date)
+        assertEquals(LocalDate.of(2021, Month.MARCH, 1), costItem.first().date)
         assertEquals("elastic", costItem.first().service)
 
     }
@@ -53,7 +53,7 @@ class CostItemTest {
                 "service_name" to "nav-dev-kafka",
                 "service_type" to "kafka",
                 "timestamp_begin" to "2021-03-01T00:00:00Z",
-                "timestamp_end" to "2021-03-02T00:00:00Z",
+                "timestamp_end" to "2021-03-02T00:00:00Z"
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
@@ -91,7 +91,7 @@ class CostItemTest {
                 "service_name" to "mortenlj-test-kafka",
                 "service_type" to "kafka",
                 "timestamp_begin" to "2021-03-01T00:00:00Z",
-                "timestamp_end" to "2021-03-02T00:00:00Z",
+                "timestamp_end" to "2021-03-02T00:00:00Z"
             )
         )
         val costItem = fromInvoiceLine(invoiceLine = invoiceLine)
@@ -108,4 +108,5 @@ class CostItemTest {
 
     }
 }
+
 

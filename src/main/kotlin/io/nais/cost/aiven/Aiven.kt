@@ -2,7 +2,6 @@ package io.nais.cost.aiven
 
 import com.nfeld.jsonpathkt.JsonPath
 import com.nfeld.jsonpathkt.extension.read
-import io.nais.cost.bigquery.BigQuery
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
@@ -27,9 +26,9 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private fun getInvoiceLines(billingGroupdId: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
-        val list = JsonPath.parse(body)?.read<List<Map<String, String>>>("$.lines[*]").orEmpty()
+        val list = JsonPath.parse(body)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
         val invoiceLines = list.map { InvoiceLine(invoiceId, it) }.toList()
-        invoiceLines.forEach { line -> log.info("Invoiceline ${line.invoiceId} to ${line.getEndTimestamp()}") }
+        invoiceLines.forEach { line -> log.info("Invoiceline ${line.invoiceId} to ${line.endTimestamp}") }
         return invoiceLines
     }
 
