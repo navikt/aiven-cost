@@ -28,8 +28,8 @@ class BigQuery {
     fun write(costItems: List<CostItem>) {
         if (costItems.isNotEmpty()) {
             deleteContentFromTable()
-            log.info("ZZZZZ")
-            Thread.sleep(Duration.ofSeconds(120L).toMillis())
+            //log.info("ZZZZZ")
+            //Thread.sleep(Duration.ofSeconds(120L).toMillis())
             log.info("woke up after truncating")
         }
         val builder = InsertAllRequest.newBuilder(TableId.of(dataset, table))
@@ -49,9 +49,10 @@ class BigQuery {
         }
     }
 
-    private fun deleteContentFromTable() {
+    fun deleteContentFromTable() {
         log.info("truncating table $table")
-        val query = "TRUNCATE TABLE `$project.$dataset.$table`"
+        val query = "DELETE FROM `$project.$dataset.$table` WHERE true;"
+        //val query = "TRUNCATE TABLE `$project.$dataset.$table`"
         val results = bigquery.service.query(QueryJobConfiguration.newBuilder(query).build())
         log.info("truncated table $table")
         results.iterateAll().forEach { log.info("insertError: $it") }
