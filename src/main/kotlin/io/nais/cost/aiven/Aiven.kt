@@ -2,12 +2,18 @@ package io.nais.cost.aiven
 
 import com.nfeld.jsonpathkt.JsonPath
 import com.nfeld.jsonpathkt.extension.read
+import io.nais.cost.bigquery.BigQuery
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io") {
+
+    private companion object {
+        private val log = LoggerFactory.getLogger(Aiven::class.java)
+    }
 
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
@@ -23,13 +29,15 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, String>>>("$.lines[*]").orEmpty()
         val invoiceLines = list.map { InvoiceLine(invoiceId, it) }.toList()
-        invoiceLines.forEach { line -> println("Invoiceline ${line.invoiceId} to ${line.getEndTimestamp()}") }
+        invoiceLines.forEach { line -> log.info("Invoiceline ${line.invoiceId} to ${line.getEndTimestamp()}") }
         return invoiceLines
     }
 
     private fun getInvoices(billingGroupdId: String): List<String>? {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice")
-        return JsonPath.parse(body)?.read("$.invoices[*].invoice_number")
+        val invoices: List<String>? = JsonPath.parse(body)?.read("$.invoices[*].invoice_number")
+        log.info("fetched invoices, got ${invoices?.size} ")
+        return invoices
     }
 
     private fun getBillingGroup(): String? {
