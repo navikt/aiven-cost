@@ -32,7 +32,7 @@ class AivenTest {
 
 
         val secret = "secret"
-        val billingGroupId = "123"
+        val billingGroupId = "7d14362d-1e2a-4864-b408-1cc631bc4fab"
         val invoiceId = "da23c-1"
         val billlingGroupJsonFromAiven = """
                                             {
