@@ -41,7 +41,8 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private fun getBillingGroup(): String? {
         val body = callAiven("/v1/billing-group")
-        return JsonPath.parse(body)?.read("$.billing_groups[0].billing_group_id")
+        val billingGroupsIds:  List<String>?  = JsonPath.parse(body)?.read("$.billing_groups[*].billing_group_id")
+        return billingGroupsIds?.filter { id -> id.equals("7d14362d-1e2a-4864-b408-1cc631bc4fab") }?.first()
     }
 
 
