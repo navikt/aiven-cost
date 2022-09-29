@@ -25,13 +25,13 @@ kind: BigQueryTable
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
-  name: costitems
+  name: costitemsv2
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
 spec:
   description: "Aiven Cost description"
-  resourceID: costitems
+  resourceID: costitemsv2
   datasetRef:
     name: aivencost
   friendlyName: costitems name name

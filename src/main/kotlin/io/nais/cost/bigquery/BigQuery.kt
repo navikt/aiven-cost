@@ -8,7 +8,7 @@ import java.time.Duration
 import java.time.format.DateTimeFormatter
 
 class BigQuery {
-    val table = "costitems"
+    val table = "costitemsv2"
     val dataset = "aivencost"
     val project = "nais-analyse-prod-2dcc"
 
