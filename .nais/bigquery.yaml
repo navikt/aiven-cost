@@ -25,6 +25,7 @@ kind: BigQueryTable
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
+    cnrm.cloud.google.com/state-into-spec: "merge"
   name: costitemsv2
   namespace: "nais-analyse"
   labels:
@@ -74,6 +75,7 @@ kind: IAMPolicyMember
 metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
+    cnrm.cloud.google.com/state-into-spec: "merge"
   name: aiven-cost-project-user
   namespace: "nais-analyse"
   labels:
