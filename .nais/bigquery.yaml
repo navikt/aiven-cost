@@ -9,7 +9,6 @@ metadata:
   labels:
     "team": "nais-analyse"
   uid: 52546d5b-ec21-46cd-aa24-d5b721919234
-
 spec:
   description: "Aiven Cost"
   friendlyName: aivencost
