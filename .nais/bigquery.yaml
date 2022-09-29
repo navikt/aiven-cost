@@ -8,7 +8,7 @@ metadata:
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
-  uid: 52546d5b-ec21-46cd-aa24-d5b721919234
+  resourceVersion: "811621457"
 spec:
   description: "Aiven Cost"
   friendlyName: aivencost
