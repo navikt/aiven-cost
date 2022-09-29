@@ -96,7 +96,7 @@ metadata:
   annotations:
     cnrm.cloud.google.com/project-id: "nais-analyse-prod-2dcc"
     cnrm.cloud.google.com/state-into-spec: "merge"
-  name: aiven-cost-data-editor
+  name: aiven-cost-data-editor2
   namespace: "nais-analyse"
   labels:
     "team": "nais-analyse"
