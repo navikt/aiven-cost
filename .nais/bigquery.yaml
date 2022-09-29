@@ -103,4 +103,4 @@ spec:
   resourceRef:
     apiVersion: bigquery.cnrm.cloud.google.com/v1beta1
     kind: BigQueryTable
-    external: projects/nais-analyse-prod-2dcc/datasets/aivencost/tables/costitems
+    external: projects/nais-analyse-prod-2dcc/datasets/aivencost/tables/costitemsv2
