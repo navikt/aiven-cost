@@ -2,6 +2,7 @@ package io.nais.cost.aiven
 
 data class InvoiceLine(
     val invoiceId: String,
+    val tenant: String,
     private val input: Map<String, Any>
 ) {
     val projectName = "project_name".mapValueAsString()
@@ -11,6 +12,7 @@ data class InvoiceLine(
     val serviceType = "service_type".mapValueAsString()
     val beginTimestamp = "timestamp_begin".mapValueAsString()
     val endTimestamp = "timestamp_end".mapValueAsString()
+    val tenant = tenant
 
     private fun String.mapValueAsString() =
         if (input.containsKey(this)) input[this] as String else ""
