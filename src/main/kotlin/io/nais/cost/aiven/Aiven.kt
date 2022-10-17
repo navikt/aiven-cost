@@ -16,19 +16,9 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
-    fun getInvoiceData(): List<InvoiceLine> {
-        var invoiceLines = mutableListOf<InvoiceLine>()
-        for (billingGroupId in getBillingGroups()) {
-            invoiceLines.addAll(flattenToInvoiceLines(getInvoices(billingGroupId), billingGroupId))
-        }
-        return invoiceLines
+    fun getInvoiceData() = getBillingGroups().flatMap { billingGroupId ->
+        getInvoices(billingGroupId).flatMap { invoiceId -> getInvoiceLines(billingGroupId, invoiceId) }
     }
-
-    private fun flattenToInvoiceLines(
-        invoices: List<String>,
-        billingGroupdId: String,
-    ): List<InvoiceLine> =
-        invoices.flatMap { invoiceId -> getInvoiceLines(billingGroupdId, invoiceId) }
 
     private fun getInvoiceLines(billingGroupdId: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
