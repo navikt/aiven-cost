@@ -10,6 +10,16 @@ import java.util.concurrent.TimeUnit
 
 class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io") {
 
+    private val map = buildBillinggroupToTenantMap()
+
+    private fun buildBillinggroupToTenantMap(): Map<String,String> {
+        val body = callAiven("v1/project")
+        val list = JsonPath.parse(body)?.read<List<Map<String, Any>>>("$.projects[*]").orEmpty()
+        val billingGroupToProjectMap = list.map { it["billing_group_id"] to it["project_name"] }.toMap()
+        billingGroupToProjectMap.map { it.key to callAiven(it.value) }
+
+    }
+
     private companion object {
         private val log = LoggerFactory.getLogger(Aiven::class.java)
     }
@@ -19,6 +29,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     fun getInvoiceData() = getBillingGroups().flatMap { billingGroupId ->
         getInvoices(billingGroupId).flatMap { invoiceId -> getInvoiceLines(billingGroupId, invoiceId) }
     }
+
 
     private fun getInvoiceLines(billingGroupdId: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
@@ -42,9 +53,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         return JsonPath.parse(this)?.read("$.billing_groups[*].billing_group_id")
     }
 
-    fun getTenant(billingGroupdId: String): String {
-        return ""
-    }
+    fun getTenant(billingGroupdId: String) = map[billingGroupdId].orEmpty()
 
     private fun callAiven(aivenApiUrl: String): String {
         return client.newCall(
