@@ -148,7 +148,7 @@ class AivenTest {
 
 
         val aiven = Aiven(secret, "$host:$port")
-        val invoiceData = aiven.getInvoiceData()
+        val invoiceData = aiven.getInvoiceDataWithoutTenants()
         assertEquals(1, invoiceData.size)
         assertEquals("test-project", invoiceData.first().projectName)
 

@@ -10,44 +10,41 @@ import java.util.concurrent.TimeUnit
 
 class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io") {
 
-    private val billingGroupToTenantMap = buildBillinggroupToTenantMap()
-
-    private fun buildBillinggroupToTenantMap(): Map<String, String> {
-        val projects = callAivenWithJsonPath<List<Map<String, String>>>("v1/project", "$.projects[*]").orEmpty()
-        val bg2ProjectMap = projects.associate { it["billing_group_id"] to it["project_name"] }
-        val bg2ServiceMap =
-            bg2ProjectMap.map { it.key to (it.value to getServiceNameFromProjectName(it.value)) }.toMap()
-        return bg2ServiceMap.map {
-            it.key.orEmpty() to getTenantNameFromService(it.value.first, it.value.second)
-        }.toMap()
-    }
-
-    private fun getServiceNameFromProjectName(projectName: String?) =
-        callAivenWithJsonPath<String>("v1/project/${projectName}/service", "$.services[*].service_name")
-
-    private fun getTenantNameFromService(projectName: String?, serviceName: String?) =
-        callAivenWithJsonPath<String>(
-            "v1/project/${projectName}/service/${serviceName}/tags",
-            "$.tags[*].tenant"
-        ).orEmpty()
-
-
     private companion object {
         private val log = LoggerFactory.getLogger(Aiven::class.java)
     }
 
     private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
 
-    fun getInvoiceData() = getBillingGroups().flatMap { billingGroupId ->
-        getInvoices(billingGroupId).flatMap { invoiceId -> getInvoiceLines(billingGroupId, invoiceId) }
+    fun getInvoiceData() = buildBillinggroupToTenantMap().flatMap { (billingGroupId, tenant) ->
+        getInvoices(billingGroupId).flatMap { invoiceId ->
+            toInvoiceLines(
+                billingGroupdId = billingGroupId,
+                tenant = tenant,
+                invoiceId = invoiceId
+            )
+        }
+    }
+
+    private fun buildBillinggroupToTenantMap(): Map<String, String> {
+        val projects = callAivenWithJsonPath<List<Map<String, String>>>("/v1/project", "$.projects[*]").orEmpty()
+        val billingGroupToProjectMap = projects.associate { it["billing_group_id"] to it["project_name"] }
+        return billingGroupToProjectMap.map { it.key!! to getTenantFromProjectName(it.value) }.toMap()
+    }
+
+    private fun getTenantFromProjectName(projectName: String?): String {
+        return callAivenWithJsonPath<String>("/v1/project/${projectName}/service", "$.services[0].tags.tenant").orEmpty()
     }
 
 
-    private fun getInvoiceLines(billingGroupdId: String, invoiceId: String): List<InvoiceLine> {
+    fun getInvoiceDataWithoutTenants() = getBillingGroups().flatMap { billingGroupId ->
+        getInvoices(billingGroupId).flatMap { invoiceId -> toInvoiceLines(billingGroupId, "", invoiceId) }
+    }
+
+    private fun toInvoiceLines(billingGroupdId: String, tenant: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
-        val tenant = billingGroupToTenantMap[billingGroupdId].orEmpty()
-        val invoiceLines = list.map { InvoiceLine(invoiceId, tenant, it) }.toList()
+        val invoiceLines = list.map { InvoiceLine(invoiceId = invoiceId, tenant = tenant, input = it) }.toList()
         invoiceLines.forEach { line -> log.info("Invoiceline ${line.invoiceId} to ${line.endTimestamp}") }
         return invoiceLines
     }
@@ -65,8 +62,10 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         return JsonPath.parse(this)?.read("$.billing_groups[*].billing_group_id")
     }
 
-    inline fun <reified T : Any> callAivenWithJsonPath(aivenApiUrl: String, jsonPath: String): T? =
-        JsonPath.parse(callAiven(aivenApiUrl))?.read(jsonPath)
+    inline fun <reified T : Any> callAivenWithJsonPath(aivenApiUrl: String, jsonPath: String): T? {
+        val x = callAiven(aivenApiUrl)
+        return JsonPath.parse(x)?.read(jsonPath)
+    }
 
 
     fun callAiven(aivenApiUrl: String): String {

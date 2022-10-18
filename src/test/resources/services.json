@@ -1,0 +1,11 @@
+{
+  "services": [
+    {
+      "service_name": "kafka",
+      "tags": {
+        "environment": "dev",
+        "tenant": "tenant"
+      }
+    }
+  ]
+}
