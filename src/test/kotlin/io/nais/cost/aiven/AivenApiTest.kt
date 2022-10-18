@@ -31,33 +31,32 @@ class AivenApiTest {
         stubFor(
             get(urlEqualTo("/v1/project"))
                 .withHeader("authorization", equalTo("aivenv1 secret"))
-                .willReturn(aResponse().withStatus(200).withBody(resource("projects.json")))
+                .willReturn(aResponse().withStatus(200).withBody(fromResource("projects.json")))
         )
 
 
         stubFor(
             get(urlMatching("/v1/project/(.*)/service"))
                 .withHeader("authorization", equalTo("aivenv1 secret"))
-                .willReturn(aResponse().withStatus(200).withBody(resource("services.json")))
+                .willReturn(aResponse().withStatus(200).withBody(fromResource("services.json")))
         )
 
 
         stubFor(
             get(urlMatching("/v1/billing-group/(.*)/invoice"))
                 .withHeader("authorization", equalTo("aivenv1 secret"))
-                .willReturn(aResponse().withStatus(200).withBody(resource("invoices.json")))
+                .willReturn(aResponse().withStatus(200).withBody(fromResource("invoices.json")))
         )
 
         stubFor(
             get(urlMatching("/v1/billing-group/(.*)/invoice/(.*)/lines"))
                 .withHeader("authorization", equalTo("aivenv1 secret"))
-                .willReturn(aResponse().withStatus(200).withBody(resource("invoicelines.json")))
+                .willReturn(aResponse().withStatus(200).withBody(fromResource("invoicelines.json")))
         )
         return server
     }
 
-
-    private fun resource(fileName: String): String? =
+    private fun fromResource(fileName: String): String? =
         javaClass.classLoader.getResource(fileName)?.readText()?.trimIndent()
 
 
