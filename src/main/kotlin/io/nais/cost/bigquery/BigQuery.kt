@@ -66,7 +66,8 @@ fun toRow(costItem: CostItem): Map<String, Any> {
         "team" to costItem.team,
         "date" to DateTimeFormatter.ISO_DATE.format(costItem.date),
         "service" to costItem.service,
-        "costInEuros" to costItem.costInEuros
+        "costInEuros" to costItem.costInEuros,
+        "tenant" to costItem.tenant
     )
 }
 
