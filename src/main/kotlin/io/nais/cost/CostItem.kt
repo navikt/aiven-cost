@@ -14,7 +14,8 @@ data class CostItem(
     val team: String,
     val service: String,
     val environment: String,
-    val costInEuros: BigDecimal
+    val costInEuros: BigDecimal,
+    val tenant: String
 )
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
@@ -26,15 +27,16 @@ fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
             CostItem(
                 invoiceId = invoiceLine.invoiceId,
                 costInEuros =
-                    invoiceLine.lineTotal.toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
-                    service = invoiceLine.serviceType.getService(invoiceLine.lineType),
-                    date = currentDate,
-                    team = invoiceLine.serviceName.getTeamName(
-                        invoiceLine.serviceType,
-                        invoiceLine.lineType
-                    ),
-                    environment = invoiceLine.projectName.toEnvironment()
-                )
+                invoiceLine.lineTotal.toEuros().divide(BigDecimal.valueOf(noOfDaysInRage), 2, RoundingMode.HALF_UP),
+                service = invoiceLine.serviceType.getService(invoiceLine.lineType),
+                date = currentDate,
+                team = invoiceLine.serviceName.getTeamName(
+                    invoiceLine.serviceType,
+                    invoiceLine.lineType
+                ),
+                environment = invoiceLine.projectName.toEnvironment(),
+                tenant = invoiceLine.tenant
+            )
         }
 }
 
