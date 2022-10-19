@@ -1,7 +1,6 @@
 package io.nais.cost
 
 import io.nais.cost.aiven.InvoiceLine
-import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.LocalDate
@@ -18,7 +17,6 @@ data class CostItem(
     val costInEuros: BigDecimal,
     val tenant: String
 )
-private val LOGGER = LoggerFactory.getLogger("CostItem")
 
 fun fromInvoiceLine(invoiceLine: InvoiceLine): List<CostItem> {
     val range =
@@ -55,9 +53,7 @@ fun getDateRangeFromInvoiceLine(beginTimestamp: String, endTimestamp: String): L
 }
 
 fun String.toEnvironment(): String {
-    val env = if (!this.contains("prod")) "dev" else "prod"
-    LOGGER.info("projectname is $this, translates to environment $env ")
-    return env
+    return if (!this.contains("prod")) "dev" else "prod"
 }
 
 fun String.toEuros(): BigDecimal = BigDecimal.valueOf(this.toDouble().times(0.85))
