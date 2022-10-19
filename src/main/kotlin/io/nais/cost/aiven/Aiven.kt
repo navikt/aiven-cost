@@ -28,10 +28,8 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
 
     private fun buildBillinggroupToTenantMap(): Map<String, String> {
         val projects = callAivenWithJsonPath<List<Map<String, Any>>>("/v1/project", "$.projects[*]").orEmpty()
-        log.info("Fetched projects list with  ${projects.size} items")
         val billingGroupToProjectMap =
             projects.associate { it["billing_group_id"] as String to it["project_name"] as String }
-        log.info("Built billing group to project map with  ${billingGroupToProjectMap.entries.size} items")
         val billingGroupTenantMap =
             billingGroupToProjectMap.map { it.key to getTenantFromProjectName(it.value) }.toMap()
         log.info("Built billinggroup to tenant map with ${billingGroupTenantMap.entries.size} entries")
@@ -66,7 +64,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         return invoices.orEmpty()
     }
 
-    private fun getBillingGroups(): List<String> = callAiven("/v1/billing-group").getBillingGroupIds().orEmpty()
+    private fun getBillingGroups(): List<String> = callAiven("/v1/billing-group")?.getBillingGroupIds().orEmpty()
 
     fun String.getBillingGroupIds(): List<String>? {
         return JsonPath.parse(this)?.read("$.billing_groups[*].billing_group_id")
@@ -78,14 +76,20 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     }
 
 
-    fun callAiven(aivenApiUrl: String): String {
+    fun callAiven(aivenApiUrl: String): String? {
         val request = Request.Builder()
             .url("$hostAndPort$aivenApiUrl")
             .addHeader("authorization", "aivenv1 $token")
             .build()
-        log.info(request.toString())
         return client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful || response.body == null) throw IOException("Unexpected code $response")
+            if (response.code == 403){
+                log.error(response.message)
+                return null
+            }
+            if (!response.isSuccessful || response.body == null){
+                throw IOException("Unexpected code $response")
+            }
+
             val json = response.body!!.string()
             log.info("called aiven at $hostAndPort$aivenApiUrl, got ${json.length} length response.")
             json

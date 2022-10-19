@@ -11,12 +11,10 @@ class AivenApiTest {
 
     @Test
     internal fun testInvoiceData() {
-        val billingGroupId = "7d14362d-1e2a-4864-b408-1cc631bc4fab"
-        val invoiceId = "da23c-1"
         val server = createWMServer()
         val aiven = Aiven("secret", "http://localhost:${server.port()}")
         val invoiceData = aiven.getInvoiceData()
-        assertEquals(7, invoiceData.size)
+        assertEquals(6, invoiceData.size) //only 6 of 7 invoice should have access
         assertEquals("test-project", invoiceData.first().projectName)
 
         server.stop()
@@ -41,11 +39,16 @@ class AivenApiTest {
                 .willReturn(aResponse().withStatus(200).withBody(fromResource("services.json")))
         )
 
-
         stubFor(
-            get(urlMatching("/v1/billing-group/(.*)/invoice"))
+            get(urlMatching("/v1/billing-group/(.*)/invoice")).atPriority(2)
                 .withHeader("authorization", equalTo("aivenv1 secret"))
                 .willReturn(aResponse().withStatus(200).withBody(fromResource("invoices.json")))
+        )
+
+        stubFor(
+            get(urlEqualTo("/v1/billing-group/fbfa93c8-f821-49b9-89a8-8b0aa628e670/invoice")).atPriority(1)
+                .withHeader("authorization", equalTo("aivenv1 secret"))
+                .willReturn(aResponse().withStatus(403).withStatusMessage("Insufficient permissions"))
         )
 
         stubFor(
