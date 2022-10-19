@@ -52,9 +52,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     private fun toInvoiceLines(billingGroupdId: String, tenant: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
-        val invoiceLines = list.map { InvoiceLine(invoiceId = invoiceId, tenant = tenant, input = it) }.toList()
-        invoiceLines.forEach { line -> log.info("Invoiceline ${line.invoiceId} to ${line.endTimestamp}") }
-        return invoiceLines
+        return list.map { InvoiceLine(invoiceId = invoiceId, tenant = tenant, input = it) }.toList()
     }
 
     private fun getInvoices(billingGroupdId: String): List<String> {
