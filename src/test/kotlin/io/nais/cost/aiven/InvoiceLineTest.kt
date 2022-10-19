@@ -49,7 +49,7 @@ class InvoiceLineTest {
 
         val map = JsonPath.parse(json)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
 
-        val invoiceLine = InvoiceLine("", map.first())
+        val invoiceLine = InvoiceLine("", "",map.first())
         val item = fromInvoiceLine(invoiceLine)
 
         kotlin.test.assertEquals("dev", item.first().environment)

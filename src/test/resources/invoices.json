@@ -1,0 +1,15 @@
+{
+  "invoices":[
+    {
+      "billing_group_name":"Default ",
+      "currency":"USD",
+      "download_cookie":"321",
+      "invoice_number":"da23c-1",
+      "period_begin":"2020-08-01T00:00:00Z",
+      "period_end":"2020-08-31T23:59:59Z",
+      "state":"paid",
+      "total_inc_vat":"111.65",
+      "total_vat_zero":"111.65"
+    }
+  ]
+}

@@ -11,7 +11,7 @@ class CostItemTest {
     @Test
     fun `convert invoiceLine to costItem for elastic`() {
         val invoiceLine = InvoiceLine(
-            "id",
+            "id","tenant",
             mapOf(
                 "project_name" to "nav-dev",
                 "line_total_usd" to "3.00",
@@ -45,7 +45,7 @@ class CostItemTest {
     @Test
     fun `convert invoiceLine to costItem for kafka`() {
         val invoiceLine = InvoiceLine(
-            "id",
+            "id","tenant",
             mapOf(
                 "project_name" to "nav-dev",
                 "line_total_usd" to "2.00",
@@ -64,7 +64,7 @@ class CostItemTest {
     @Test
     fun `convert invoiceLine to costItem for support`() {
         val invoiceLine = InvoiceLine(
-            "id",
+            "id","tenant",
             mapOf(
                 "project_name" to "nav-prod",
                 "line_total_usd" to "2.00",
@@ -83,7 +83,7 @@ class CostItemTest {
     @Test
     fun `convert invoiceLine to costItem for test`() {
         val invoiceLine = InvoiceLine(
-            "id",
+            "id","tenant",
             mapOf(
                 "project_name" to "nav-23d2",
                 "line_total_usd" to "2.00",

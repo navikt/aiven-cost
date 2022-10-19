@@ -148,7 +148,7 @@ class AivenTest {
 
 
         val aiven = Aiven(secret, "$host:$port")
-        val invoiceData = aiven.getInvoiceData()
+        val invoiceData = aiven.getInvoiceDataWithoutTenants()
         assertEquals(1, invoiceData.size)
         assertEquals("test-project", invoiceData.first().projectName)
 
@@ -164,7 +164,7 @@ class AivenTest {
 
         val map = JsonPath.parse(json)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
 
-        val invoiceLine = InvoiceLine("", map.first())
+        val invoiceLine = InvoiceLine("", "", map.first())
         val item = fromInvoiceLine(invoiceLine)
 
         assertEquals("dev", item.first().environment)
@@ -181,7 +181,7 @@ class AivenTest {
 
         val map = JsonPath.parse(json)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
 
-        val invoiceLine = InvoiceLine("", map.first())
+        val invoiceLine = InvoiceLine("", "",map.first())
         val item = fromInvoiceLine(invoiceLine)
 
         assertEquals("dev", item.first().environment)

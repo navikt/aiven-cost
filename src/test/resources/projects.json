@@ -1,0 +1,49 @@
+{
+  "projects": [
+    {
+      "billing_group_id": "10a5215c-ebe4-447c-80d3-8adfa878c3cc",
+      "project_name": "dev-nais-dev"
+    },
+    {
+      "billing_group_id": "0a012043-d6a7-4abd-b343-df38c623c4f3",
+      "project_name": "mtpilot-dev"
+    },
+    {
+      "billing_group_id": "7d14362d-1e2a-4864-b408-1cc631bc4fab",
+      "project_name": "nav-integration-test"
+    },
+    {
+      "billing_group_id": "7d14362d-1e2a-4864-b408-1cc631bc4fab",
+      "project_name": "nav-dev"
+    },
+    {
+      "billing_group_id": "7d14362d-1e2a-4864-b408-1cc631bc4fab",
+      "project_name": "nav-prod"
+    },
+    {
+      "billing_group_id": "7d14362d-1e2a-4864-b408-1cc631bc4fab",
+      "project_name": "nav-no-billing"
+    },
+    {
+      "billing_group_id": "e3e5f34d-e935-4514-810f-c427e253413d",
+      "project_name": "mtpilot-prod"
+    },
+    {
+      "billing_group_id": "fbfa93c8-f821-49b9-89a8-8b0aa628e670",
+      "project_name": "nav-infrastructure"
+    },
+    {
+      "billing_group_id": "3269525d-d93c-46f8-9fd3-29d0d55d0ce1",
+      "project_name": "nav-ci"
+
+    },
+    {
+      "billing_group_id": "b9b49490-6cbf-43af-a2ca-f7b2b30363fb",
+      "project_name": "dev-nais-ci"
+    },
+    {
+      "billing_group_id": "7d14362d-1e2a-4864-b408-1cc631bc4fab",
+      "project_name": "nav-23d2"
+    }
+  ]
+}

@@ -17,7 +17,8 @@ class CostItemDatasetTest {
             team = "nais",
             date = LocalDate.of(2021, Month.JANUARY,1),
             service = "kafka",
-            costInEuros = BigDecimal("1.00")
+            costInEuros = BigDecimal("1.00"),
+            tenant = "tenant"
         )
         val rowContent: MutableMap<String, Any> = HashMap()
         rowContent["invoiceId"] = "abc"
@@ -26,6 +27,7 @@ class CostItemDatasetTest {
         rowContent["date"] = "2021-01-01"
         rowContent["service"] = "kafka"
         rowContent["costInEuros"] = BigDecimal("1.00")
+        rowContent["tenant"] = "tenant"
 
         assertThat(rowContent).containsAllEntriesOf(toRow(costItem))
 

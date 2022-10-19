@@ -2,6 +2,7 @@ package io.nais.cost.aiven
 
 data class InvoiceLine(
     val invoiceId: String,
+    val tenant: String,
     private val input: Map<String, Any>
 ) {
     val projectName = "project_name".mapValueAsString()
