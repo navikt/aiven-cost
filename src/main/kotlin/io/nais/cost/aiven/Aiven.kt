@@ -85,8 +85,10 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         log.info(request.toString())
         return client.newCall(request).execute().use { response ->
             if (!response.isSuccessful || response.body == null) throw IOException("Unexpected code $response")
-            log.info("called aiven at $hostAndPort$aivenApiUrl, got ${response.body!!.contentLength()} length response.")
-            response.body!!.string()
+            val json = response.body!!.string()
+            log.info("called aiven at $hostAndPort$aivenApiUrl, got ${json.length} length response.")
+            json
+
         }
     }
 }
