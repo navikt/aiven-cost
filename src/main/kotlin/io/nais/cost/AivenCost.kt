@@ -61,7 +61,8 @@ fun Application.aivenApi() {
         nais()
     }
     val configuration = Configuration()
-    runAivenJob(configuration)
+    //do not run job at startup to remove error with streaming buffer not commited.
+    //runAivenJob(configuration)
     scheduleJobEveryDay(configuration)
 }
 
