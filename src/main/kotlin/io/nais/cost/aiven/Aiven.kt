@@ -54,6 +54,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     private fun toInvoiceLines(billingGroupdId: String, tenant: String, invoiceId: String): List<InvoiceLine> {
         val body = callAiven("/v1/billing-group/$billingGroupdId/invoice/$invoiceId/lines")
         val list = JsonPath.parse(body)?.read<List<Map<String, Any>>>("$.lines[*]").orEmpty()
+        if (tenant.isBlank()) log.warn("Empty tenant for invoiceLine with invoiceId $invoiceId, billing group $billingGroupdId")
         return list.map { InvoiceLine(invoiceId = invoiceId, tenant = tenant, input = it) }.toList()
     }
 
