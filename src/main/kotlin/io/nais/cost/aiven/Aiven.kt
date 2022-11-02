@@ -38,10 +38,12 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
     }
 
     private fun getTenantFromProjectName(projectName: String?): String {
-        return callAivenWithJsonPath<String>(
+        val tenant = callAivenWithJsonPath<String>(
             "/v1/project/${projectName}/service",
             "$.services[0].tags.tenant"
-        ).orEmpty()
+        )
+        tenant ?: log.warn("Tenant for $projectName is empty")
+        return tenant.orEmpty()
     }
 
 
@@ -80,11 +82,11 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
             .addHeader("authorization", "aivenv1 $token")
             .build()
         return client.newCall(request).execute().use { response ->
-            if (response.code == 403){
+            if (response.code == 403) {
                 log.error(response.message)
                 return null
             }
-            if (!response.isSuccessful || response.body == null){
+            if (!response.isSuccessful || response.body == null) {
                 throw IOException("Unexpected code $response")
             }
 
