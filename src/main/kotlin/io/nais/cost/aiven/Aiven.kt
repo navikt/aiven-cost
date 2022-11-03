@@ -32,9 +32,6 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
             projects.map { it["billing_group_id"] as String to it["project_name"] as String }
         log.info("Billing group to project pair:")
         log.info(billingGroupToProjectPairs.joinToString { "${it.first}:${it.second}\n" })
-        //val billingGroupToProjectMap = billingGroupToProjectPairs.toMap()
-        //log.info("Billing group to project map:")
-        //log.info(billingGroupToProjectMap.entries.joinToString { "${it.key}:${it.value}\n" })
         val billingGroupTenantPairs = billingGroupToProjectPairs.map { it.first to getTenantFromProjectName(it.second) }
         log.info("Billing group to tenant pairs:")
         log.info(billingGroupTenantPairs.joinToString { "${it.first}:${it.second}\n" })
