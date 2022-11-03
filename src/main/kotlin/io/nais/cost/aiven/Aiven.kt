@@ -33,6 +33,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         val billingGroupTenantMap =
             billingGroupToProjectMap.map { it.key to getTenantFromProjectName(it.value) }.toMap()
         log.info("Built billinggroup to tenant map with ${billingGroupTenantMap.entries.size} entries")
+        log.info(billingGroupTenantMap.entries.joinToString { "${it.key}: ${it.value}" })
         return billingGroupTenantMap
 
     }
