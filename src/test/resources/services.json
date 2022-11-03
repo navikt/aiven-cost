@@ -6,6 +6,13 @@
         "environment": "dev",
         "tenant": "tenant"
       }
+    },
+    {
+      "service_name": "kafka",
+      "tags": {
+        "environment": "dev",
+        "tenant": ""
+      }
     }
   ]
 }

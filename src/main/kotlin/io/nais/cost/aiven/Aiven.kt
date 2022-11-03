@@ -39,14 +39,14 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         log.info("Built billinggroup to tenant map with ${billingGroupTenantMap.entries.size} entries")
         log.info(billingGroupTenantMap.entries.joinToString { "${it.key}: ${it.value}\n" })
         return billingGroupTenantMap
-
     }
 
     private fun getTenantFromProjectName(projectName: String?): String {
-        val tenant = callAivenWithJsonPath<String>(
+        val tenantList = callAivenWithJsonPath<List<String>>(
             "/v1/project/${projectName}/service",
-            "$.services[0].tags.tenant"
+            "$.services[*].tags.tenant"
         )
+        val tenant = tenantList?.filterNot { it.isEmpty()}?.firstOrNull()
         tenant ?: log.warn("Tenant for $projectName is empty")
         return tenant.orEmpty()
     }
