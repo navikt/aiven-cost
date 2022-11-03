@@ -30,11 +30,13 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         val projects = callAivenWithJsonPath<List<Map<String, Any>>>("/v1/project", "$.projects[*]").orEmpty()
         val billingGroupToProjectMap =
             projects.associate { it["billing_group_id"] as String to it["project_name"] as String }
-        val billingGroupTenantMap =
-            billingGroupToProjectMap.map { it.key to getTenantFromProjectName(it.value) }.toMap()
-        log.info("Built billinggroup to tenant map with ${billingGroupTenantMap.entries.size} entries")
-        log.info(billingGroupTenantMap.entries.joinToString { "${it.key}: ${it.value}" })
-        return billingGroupTenantMap
+        val billingGroupPairs =
+            billingGroupToProjectMap.map { it.key to getTenantFromProjectName(it.value) }
+        billingGroupPairs.filter { it.second.isBlank() }
+        val billingGroupdMap = billingGroupPairs.toMap()
+        log.info("Built billinggroup to tenant map with ${billingGroupdMap.entries.size} entries")
+        log.info(billingGroupdMap.entries.joinToString { "${it.key}: ${it.value}" })
+        return billingGroupdMap
 
     }
 
