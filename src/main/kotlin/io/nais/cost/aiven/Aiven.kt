@@ -14,7 +14,7 @@ class Aiven(val token: String, val hostAndPort: String = "https://api.aiven.io")
         private val log = LoggerFactory.getLogger(Aiven::class.java)
     }
 
-    private val client = OkHttpClient.Builder().callTimeout(5, TimeUnit.SECONDS).build()
+    private val client = OkHttpClient.Builder().callTimeout(20, TimeUnit.SECONDS).build()
 
     fun getInvoiceData() = buildBillinggroupToTenantMap().flatMap { (billingGroupId, tenant) ->
         getInvoices(billingGroupId).flatMap { invoiceId ->

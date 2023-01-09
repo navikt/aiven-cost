@@ -78,7 +78,7 @@ fun scheduleJobEveryDay(configuration: Configuration) {
     LOGGER.info("scheduled Aiven job to run once each day, beginning on $start")
 }
 
-private fun runAivenJob(configuration: Configuration) {
+ fun runAivenJob(configuration: Configuration) {
     val invoiceData = Aiven(configuration.aivenToken).getInvoiceData()
     val costItems = invoiceData.flatMap { fromInvoiceLine(it) }
     LOGGER.info("fetched data from aiven: ${invoiceData.size} && ${costItems.size}")

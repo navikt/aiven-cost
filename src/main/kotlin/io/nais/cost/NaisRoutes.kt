@@ -21,4 +21,8 @@ fun Route.nais() {
             TextFormat.write004(this, CollectorRegistry.defaultRegistry.filteredMetricFamilySamples(names))
         }
     }
+
+    get("/internal/startaiven"){
+        runAivenJob(Configuration())
+    }
 }
