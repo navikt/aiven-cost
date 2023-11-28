@@ -50,7 +50,7 @@ jobs:
       - name: "Deploy to prod-gcp"
         uses: "nais/deploy/actions/deploy@v1"
         env:
-          "IMAGE": ${{ steps.docker-push.outputs.image }}
+          "IMAGE": ${{ build.steps.docker-push.outputs.image }}
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/nais.yaml"
