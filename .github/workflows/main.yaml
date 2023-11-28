@@ -51,7 +51,7 @@ jobs:
   deployToProd:
     name: "Deploy to prod"
     needs:
-      - "build and push"
+      - "build-and-push"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
