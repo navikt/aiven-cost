@@ -8,7 +8,7 @@ jobs:
     name: "bigquery setup"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: "Setup bigquery"
         uses: "nais/deploy/actions/deploy@v1"
         env:
@@ -17,9 +17,9 @@ jobs:
           "RESOURCE": ".nais/bigquery.yaml"
   build:
     name: "build"
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-lastest"
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - uses: "gradle/wrapper-validation-action@v1"
       - uses: "actions/cache@v2"
         with:
@@ -32,6 +32,7 @@ jobs:
       - name: "compile and run tests"
         run: "./gradlew build"
   build-and-push:
+    needs: build
     permissions:
       contents: "read"
       id-token: "write"
