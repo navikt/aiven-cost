@@ -32,7 +32,9 @@ jobs:
       - name: "compile and run tests"
         run: "./gradlew build"
   build-and-push:
-    needs: build
+    name: "build and push"
+    needs:
+      - "build"
     permissions:
       contents: "read"
       id-token: "write"
@@ -49,8 +51,8 @@ jobs:
   deployToProd:
     name: "Deploy to prod"
     needs:
-      - "build"
-    runs-on: "ubuntu-18.04"
+      - "build and push"
+    runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
       - name: "Deploy to prod-gcp"
