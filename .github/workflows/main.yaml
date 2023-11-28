@@ -40,17 +40,10 @@ jobs:
           team: nais-analyse
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
-  deployToProd:
-    name: "Deploy to prod"
-    needs:
-      - "build"
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v2"
       - name: "Deploy to prod-gcp"
         uses: "nais/deploy/actions/deploy@v1"
         env:
-          "IMAGE": ${{ build.steps.docker-push.outputs.image }}
+          "IMAGE": ${{ steps.docker-push.outputs.image }}
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/nais.yaml"
