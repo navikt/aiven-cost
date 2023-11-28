@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - "main"
-env:
-  "IMAGE": "docker.pkg.github.com/${{ github.repository }}/aiven-cost:${{ github.sha\
-    \ }}"
 jobs:
   bigquery:
     name: "bigquery setup"
@@ -34,12 +31,20 @@ jobs:
           "java-version": "17"
       - name: "compile and run tests"
         run: "./gradlew build"
-      - name: "Build and publish Docker image"
-        run: "docker build --pull --tag ${IMAGE} . && echo $GITHUB_TOKEN | docker login\
-        \ --username $GITHUB_REPOSITORY --password-stdin https://docker.pkg.github.com\
-        \ && docker push ${IMAGE}"
-        env:
-          "GITHUB_TOKEN": "${{ secrets.GITHUB_TOKEN }}"
+  build-and-push:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: nais/docker-build-push@v0
+        id: docker-push
+        with:
+          team: nais-analyse
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # required, but is defined as an organization variable
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # required, but is defined as an organization secret
   deployToProd:
     name: "Deploy to prod"
     needs:
@@ -50,6 +55,7 @@ jobs:
       - name: "Deploy to prod-gcp"
         uses: "nais/deploy/actions/deploy@v1"
         env:
+          "IMAGE": ${{ steps.docker-push.outputs.image }}
           "APIKEY": "${{ secrets.NAIS_DEPLOY_APIKEY }}"
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/nais.yaml"
