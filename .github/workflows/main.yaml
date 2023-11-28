@@ -16,6 +16,9 @@ jobs:
           "CLUSTER": "prod-gcp"
           "RESOURCE": ".nais/bigquery.yaml"
   build:
+    permissions:
+      contents: "read"
+      id-token: "write"
     name: "build"
     runs-on: "ubuntu-latest"
     steps:
@@ -31,17 +34,6 @@ jobs:
           "java-version": "17"
       - name: "compile and run tests"
         run: "./gradlew build"
-  build-and-push:
-    name: "build and push"
-    needs:
-      - "build"
-    permissions:
-      contents: "read"
-      id-token: "write"
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - uses: nais/docker-build-push@v0
         id: docker-push
         with:
@@ -51,7 +43,7 @@ jobs:
   deployToProd:
     name: "Deploy to prod"
     needs:
-      - "build-and-push"
+      - "build"
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@v2"
