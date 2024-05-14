@@ -1,3 +1,5 @@
+## This repository is replaced by https://github.com/nais/aiven-cost
+
 # aiven-cost
 
 Because every project must have a README.md!
